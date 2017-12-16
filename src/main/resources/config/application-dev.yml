@@ -1,0 +1,23 @@
+server:
+  port: 7777
+
+# 配置路由服务网关
+zuul:
+  # 忽略所有微服务, 由路由指定
+  ignored-services: '*'
+
+  # 路由
+  routes:
+    # api server name
+    single-sign-on:
+      # 请求策略
+      path: /sso/**
+      # 开启/关闭剥离前缀(false: /sso/login --> /sso/login, true: /sso/login --> /login)
+      strip-prefix: false
+      # 请求地址
+      #url: http://127.0.0.1:8088/
+      # 面向服务策略, 指定Eureka注册中心服务id
+      serviceId: single-sign-on
+
+    # api server name
+
