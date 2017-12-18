@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 /**
- * Class Name: UserLoginZuulFilter
+ * Class Name: UserSignInZuulFilter
  * Package: com.nsntc.zuul.filter
  * Description: 用户登录过滤器
  * @author wkm
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  * Version: 1.0
  */
 @Component
-public class UserLoginZuulFilter extends ZuulFilter {
+public class UserSignInZuulFilter extends ZuulFilter {
 
     private static final String FILTER_IGNORE_PREFIX = "/sso/";
 
@@ -79,7 +79,7 @@ public class UserLoginZuulFilter extends ZuulFilter {
         String uri = RequestUtil.getRequest().getRequestURI().toString();
         /** /sso/开头, 则不过滤 */
         if (StringUtils.startsWithIgnoreCase(uri, FILTER_IGNORE_PREFIX)) {
-            //flag = false;
+            flag = false;
         }
         RequestContext requestContext = RequestContext.getCurrentContext();
         /** 向下传递"是否过滤" */

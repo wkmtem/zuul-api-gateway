@@ -17,6 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import static org.springframework.util.ReflectionUtils.rethrowRuntimeException;
 
+/**
+ * Class Name: ErrorZuulFilter
+ * Package: com.nsntc.zuul.filter
+ * Description: 异常过滤器
+ * @author wkm
+ * Create DateTime: 2017/12/18 下午4:45
+ * Version: 1.0
+ */
 @Component
 @Slf4j
 public class ErrorZuulFilter extends ZuulFilter {
@@ -38,9 +46,17 @@ public class ErrorZuulFilter extends ZuulFilter {
 
     @Override
     public Object run() {
+        this.handleException();
+        return null;
+    }
 
+    /**
+     * Method Name: handleException
+     * Description: 异常处理
+     * Create DateTime: 2017/12/18 上午4:08
+     */
+    private void handleException() {
         String responseBody = null;
-
         try {
             RequestContext requestContext = RequestContext.getCurrentContext();
             /** 响应json编码 */
@@ -66,6 +82,5 @@ public class ErrorZuulFilter extends ZuulFilter {
             log.error("[未定义错误] >>> {{}}", e.getMessage(), e);
             rethrowRuntimeException(e);
         }
-        return null;
     }
 }
