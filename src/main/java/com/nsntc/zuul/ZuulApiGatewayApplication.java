@@ -2,6 +2,8 @@ package com.nsntc.zuul;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 /**
@@ -12,6 +14,10 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
  * Create DateTime: 2017/12/16 上午5:36
  * Version: 1.0
  */
+/** 启用Feign客户端 */
+@EnableFeignClients
+/** 开启容错机制 */
+@EnableHystrix
 /** 启用Zuul代理 */
 @EnableZuulProxy
 @SpringBootApplication

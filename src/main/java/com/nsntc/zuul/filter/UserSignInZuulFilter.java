@@ -7,7 +7,9 @@ import com.nsntc.commons.enums.ZuulFilterTypeEnum;
 import com.nsntc.commons.exception.ApplicationException;
 import com.nsntc.commons.utils.RequestUtil;
 import com.nsntc.zuul.constant.ZuulConstant;
+import com.nsntc.zuul.service.microapi.SbInterviewSsoApiService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,6 +22,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class UserSignInZuulFilter extends ZuulFilter {
+
+    @Autowired
+    private SbInterviewSsoApiService sbInterviewSsoApiService;
 
     private static final String FILTER_IGNORE_PREFIX = "/sso/";
 
@@ -95,14 +100,19 @@ public class UserSignInZuulFilter extends ZuulFilter {
     private void checkUserToken() {
         RequestContext requestContext = RequestContext.getCurrentContext();
         String cookieValue = RequestUtil.getCookieValue("SSO_TOKEN");
-        System.out.println(cookieValue);
-        /** 通过微服务 --> redis 查询登录情况 */
-        String jsonValue = "";
+        /** redis微服务 */
+        String jsonValue = this.sbInterviewSsoApiService.getUserByToken(cookieValue);
         // todo 返回用户为空
         if (StringUtils.isEmpty(jsonValue)) {
             /** 拦截请求, 不对其进行路由 */
             requestContext.setSendZuulResponse(false);
             throw new ApplicationException(ResultEnum.USER_ACCOUNT_NOT_LOGIN);
+        } else {
+            if (StringUtils.equals(ResultEnum.SYSTEM_ERROR.getMessage(), jsonValue)) {
+                /** 拦截请求, 不对其进行路由 */
+                requestContext.setSendZuulResponse(false);
+                throw new ApplicationException(ResultEnum.SYSTEM_ERROR);
+            }
         }
         /** 放行请求, 对其进行路由 */
         requestContext.setSendZuulResponse(true);
