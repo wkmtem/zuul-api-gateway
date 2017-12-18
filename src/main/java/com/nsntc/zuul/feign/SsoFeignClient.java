@@ -21,7 +21,7 @@ public interface SsoFeignClient {
 
     /**
      * Method Name: getUserByToken
-     * Description: 不能用@GetMapping组合替换
+     * Description: 根据token获取用户
      * Create DateTime: 2017/12/18 下午7:52
      * @param token
      * @return
@@ -31,7 +31,7 @@ public interface SsoFeignClient {
 
     /**
      * Method Name: saveOperationLog
-     * Description:
+     * Description: 保存操作日志
      * Create DateTime: 2017/12/19 上午1:19
      * @param param
      */
