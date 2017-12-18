@@ -31,6 +31,6 @@ public interface ZuulConstant {
 
     String REQUEST_PARAM = "request_param";
 
-    String REQUEST_OS_BROWSER = "request_os_browser";
+    String REQUEST_USER_AGENT = "request_user_agent";
 
 }

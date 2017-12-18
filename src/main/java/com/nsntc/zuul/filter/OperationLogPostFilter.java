@@ -58,16 +58,16 @@ public class OperationLogPostFilter extends ZuulFilter {
      */
     private void operationLog() {
         RequestContext requestContext = RequestContext.getCurrentContext();
-        String uri = (String) requestContext.get(ZuulConstant.REQUEST_URI);
         String ip = (String) requestContext.get(ZuulConstant.REQUEST_IP);
-        String osBrowser = (String) requestContext.get(ZuulConstant.REQUEST_OS_BROWSER);
+        String userAgent = (String) requestContext.get(ZuulConstant.REQUEST_USER_AGENT);
+        String uri = (String) requestContext.get(ZuulConstant.REQUEST_URI);
         Map<String, String[]> paramMap = (Map<String, String[]>) requestContext.get(ZuulConstant.REQUEST_PARAM);
         long postMillis = System.currentTimeMillis() - (long) requestContext.get(ZuulConstant.REQUEST_TIME);
         RedisUser user = (RedisUser) requestContext.get(ZuulConstant.REQUEST_USER);
 
         Map<String, Object> map = new HashMap<>(8);
         map.put("remoteIp", ip);
-        map.put("osBrowser", osBrowser);
+        map.put("userAgent", userAgent);
         map.put("requestUri", uri);
         map.put("requestParam", GsonUtil.toJson(paramMap));
         map.put("source", "0");
