@@ -1,5 +1,5 @@
 server:
-  port: 7777
+  port: 80
 
 # 配置路由服务网关
 zuul:
