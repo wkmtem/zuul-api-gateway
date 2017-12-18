@@ -86,7 +86,7 @@ public class UserSignInPreFilter extends ZuulFilter {
         boolean flag = false;
         RequestContext requestContext = RequestContext.getCurrentContext();
         String uri = requestContext.getRequest().getRequestURI().toString();
-        String osAndBrowser = RequestUtil.getOsAndBrowserInfo();
+        String userAgent = requestContext.getRequest().getHeader("user-agent");
         Map<String, String[]> parameterMap = requestContext.getRequest().getParameterMap();
         /** 非/sso/开头, 过滤 */
         if (!StringUtils.startsWithIgnoreCase(uri, ZuulConstant.FILTER_IGNORE_PREFIX)) {
@@ -94,7 +94,7 @@ public class UserSignInPreFilter extends ZuulFilter {
             requestContext.set(ZuulConstant.REQUEST_IP, RequestUtil.getRequest().getRemoteAddr());
             requestContext.set(ZuulConstant.REQUEST_TIME, System.currentTimeMillis());
             requestContext.set(ZuulConstant.REQUEST_PARAM, parameterMap);
-            requestContext.set(ZuulConstant.REQUEST_OS_BROWSER, osAndBrowser);
+            requestContext.set(ZuulConstant.REQUEST_OS_BROWSER, userAgent);
             flag = true;
         }
         /** 向下传递"是否过滤" */
