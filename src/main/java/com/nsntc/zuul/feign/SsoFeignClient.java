@@ -4,9 +4,12 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
 
 /**
- * Class Name: SbInterviewSsoFeignClient
+ * Class Name: SsoFeignClient
  * Package: com.spring.cloud.feign
  * Description: 申明Feign客户端, 并指明服务id
  * @author wkm
@@ -14,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * Version: 1.0
  */
 @FeignClient(value = "sb-interview-sso")
-public interface SbInterviewSsoFeignClient {
+public interface SsoFeignClient {
 
     /**
      * Method Name: getUserByToken
@@ -23,6 +26,15 @@ public interface SbInterviewSsoFeignClient {
      * @param token
      * @return
      */
-    @RequestMapping(value = "api/user/{token}", method = RequestMethod.GET)
+    @RequestMapping(value = "sso/api/user/{token}", method = RequestMethod.GET)
     String getUserByToken(@PathVariable("token") String token);
+
+    /**
+     * Method Name: saveOperationLog
+     * Description:
+     * Create DateTime: 2017/12/19 上午1:19
+     * @param param
+     */
+    @RequestMapping(value = "sso/api/operation", method = RequestMethod.POST)
+    void saveOperationLog(@RequestParam Map<String, Object> param);
 }

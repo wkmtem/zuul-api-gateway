@@ -14,4 +14,23 @@ public interface ZuulConstant {
 
     String THROWABLE_KEY = "throwable";
 
+    /**
+     * 忽略过滤地址前缀
+     */
+    String FILTER_IGNORE_PREFIX = "/sso/";
+
+    String COOKIE_KEY = "SSO_TOKEN";
+
+    String REQUEST_URI = "request_uri";
+
+    String REQUEST_IP = "request_ip";
+
+    String REQUEST_USER = "request_user";
+
+    String REQUEST_TIME = "request_time";
+
+    String REQUEST_PARAM = "request_param";
+
+    String REQUEST_OS_BROWSER = "request_os_browser";
+
 }

@@ -5,28 +5,31 @@ import com.netflix.zuul.context.RequestContext;
 import com.nsntc.commons.enums.ResultEnum;
 import com.nsntc.commons.enums.ZuulFilterTypeEnum;
 import com.nsntc.commons.exception.ApplicationException;
+import com.nsntc.commons.utils.GsonUtil;
 import com.nsntc.commons.utils.RequestUtil;
+import com.nsntc.zuul.bean.RedisUser;
 import com.nsntc.zuul.constant.ZuulConstant;
-import com.nsntc.zuul.service.microapi.SbInterviewSsoApiService;
+import com.nsntc.zuul.service.microapi.SsoApiService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 /**
- * Class Name: UserSignInZuulFilter
+ * Class Name: UserSignInPreFilter
  * Package: com.nsntc.zuul.filter
- * Description: 用户登录过滤器
+ * Description: 用户登录前置过滤器
  * @author wkm
  * Create DateTime: 2017/12/16 上午8:02
  * Version: 1.0
  */
 @Component
-public class UserSignInZuulFilter extends ZuulFilter {
+public class UserSignInPreFilter extends ZuulFilter {
 
     @Autowired
-    private SbInterviewSsoApiService sbInterviewSsoApiService;
-
-    private static final String FILTER_IGNORE_PREFIX = "/sso/";
+    private SsoApiService ssoApiService;
 
     /**
      * Method Name: shouldFilter
@@ -80,13 +83,20 @@ public class UserSignInZuulFilter extends ZuulFilter {
      * @return
      */
     private boolean ignoreURI() {
-        boolean flag = true;
-        String uri = RequestUtil.getRequest().getRequestURI().toString();
-        /** /sso/开头, 则不过滤 */
-        if (StringUtils.startsWithIgnoreCase(uri, FILTER_IGNORE_PREFIX)) {
-            flag = false;
-        }
+        boolean flag = false;
         RequestContext requestContext = RequestContext.getCurrentContext();
+        String uri = requestContext.getRequest().getRequestURI().toString();
+        String osAndBrowser = RequestUtil.getOsAndBrowserInfo();
+        Map<String, String[]> parameterMap = requestContext.getRequest().getParameterMap();
+        /** 非/sso/开头, 过滤 */
+        if (!StringUtils.startsWithIgnoreCase(uri, ZuulConstant.FILTER_IGNORE_PREFIX)) {
+            requestContext.set(ZuulConstant.REQUEST_URI, uri);
+            requestContext.set(ZuulConstant.REQUEST_IP, RequestUtil.getRequest().getRemoteAddr());
+            requestContext.set(ZuulConstant.REQUEST_TIME, System.currentTimeMillis());
+            requestContext.set(ZuulConstant.REQUEST_PARAM, parameterMap);
+            requestContext.set(ZuulConstant.REQUEST_OS_BROWSER, osAndBrowser);
+            flag = true;
+        }
         /** 向下传递"是否过滤" */
         requestContext.set(ZuulConstant.NEXT_FILTER, flag);
         return flag;
@@ -99,21 +109,28 @@ public class UserSignInZuulFilter extends ZuulFilter {
      */
     private void checkUserToken() {
         RequestContext requestContext = RequestContext.getCurrentContext();
-        String cookieValue = RequestUtil.getCookieValue("SSO_TOKEN");
+        String cookieValue = RequestUtil.getCookieValue(ZuulConstant.COOKIE_KEY);
         /** redis微服务 */
-        String jsonValue = this.sbInterviewSsoApiService.getUserByToken(cookieValue);
-        // todo 返回用户为空
+        String jsonValue = this.ssoApiService.getUserByToken(cookieValue);
+
+        /** 返回用户为空 */
         if (StringUtils.isEmpty(jsonValue)) {
             /** 拦截请求, 不对其进行路由 */
             requestContext.setSendZuulResponse(false);
             throw new ApplicationException(ResultEnum.USER_ACCOUNT_NOT_LOGIN);
-        } else {
-            if (StringUtils.equals(ResultEnum.SYSTEM_ERROR.getMessage(), jsonValue)) {
-                /** 拦截请求, 不对其进行路由 */
-                requestContext.setSendZuulResponse(false);
-                throw new ApplicationException(ResultEnum.SYSTEM_ERROR);
-            }
+        /** 容错机制 */
+        } else if (StringUtils.equals(ResultEnum.SYSTEM_ERROR.getMessage(), jsonValue)) {
+            /** 拦截请求, 不对其进行路由 */
+            requestContext.setSendZuulResponse(false);
+            throw new ApplicationException(ResultEnum.SYSTEM_ERROR);
         }
+
+        try {
+            requestContext.set(ZuulConstant.REQUEST_USER, GsonUtil.toObject(jsonValue, RedisUser.class));
+        } catch (Exception e) {
+            throw new HttpMessageNotReadableException(ResultEnum.JSON_CONVERT_FAILURE.getMessage());
+        }
+
         /** 放行请求, 对其进行路由 */
         requestContext.setSendZuulResponse(true);
     }

@@ -1,5 +1,5 @@
 server:
-  port: 80
+  port: 8080
 
 # Eureka Client
 eureka:
@@ -33,3 +33,9 @@ zuul:
       #url: http://127.0.0.1:8088/
       # 面向服务策略, 指定Eureka注册中心服务id
       serviceId: sb-interview-sso
+
+    # api server name
+    sb-test:
+      path: /test/**
+      strip-prefix: false
+      serviceId: sb-test

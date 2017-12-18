@@ -2,7 +2,6 @@ package com.nsntc.zuul.filter;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.netflix.zuul.exception.ZuulException;
 import com.nsntc.commons.constant.SystemConstant;
 import com.nsntc.commons.enums.ResultEnum;
 import com.nsntc.commons.enums.ZuulFilterTypeEnum;
@@ -11,6 +10,7 @@ import com.nsntc.commons.utils.GsonUtil;
 import com.nsntc.commons.utils.ResultUtil;
 import com.nsntc.zuul.constant.ZuulConstant;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
@@ -71,8 +71,14 @@ public class ErrorZuulFilter extends ZuulFilter {
                 responseBody = GsonUtil.toJson(ResultUtil.error(e.getCode(), e.getMessage()));
                 requestContext.setResponseBody(responseBody);
             }
+            else if (exception instanceof HttpMessageNotReadableException) {
+                HttpMessageNotReadableException e = (HttpMessageNotReadableException) exception;
+                log.error("[JSON转换错误] >>> {{}}", e.getMessage(), e);
+                responseBody = GsonUtil.toJson(ResultUtil.error(ResultEnum.JSON_CONVERT_FAILURE));
+                requestContext.setResponseBody(responseBody);
+            }
             else {
-                log.error("[过滤器错误警告] >>> {{}}", exception.getMessage(), exception);
+                log.error("[错误警告] >>> {{}}", exception.getMessage(), exception);
                 responseBody = GsonUtil.toJson(ResultUtil.error(ResultEnum.SYSTEM_ERROR));
                 requestContext.setResponseBody(responseBody);
             }
