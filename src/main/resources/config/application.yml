@@ -3,4 +3,4 @@ spring:
     name: zuul-api-gateway
 
   profiles:
-    active: dev
+    active: local
