@@ -36,6 +36,8 @@ zuul:
 
     # api server name
     interview-system:
+      # 转发所有header(单路由)
+      sensitive-headers: "*"
       path: /sys/**
       strip-prefix: false
       serviceId: iinterview-system

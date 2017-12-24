@@ -4,3 +4,9 @@ spring:
 
   profiles:
     active: local
+
+zuul:
+  # 转发所有header(全局路由)
+  #sensitive-headers: "*"
+
+
