@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${port:8080}
 
 # Eureka Client
 eureka:
@@ -11,11 +11,11 @@ eureka:
     # Eureka client 与 server 交互地址(已配置安全认证)
     service-url:
       # 集群时, 可指定一个, 也可指定多个(","隔开)
-      defaultZone: http://administrator:omega@127.0.0.1:7777/eureka/
+      defaultZone: ${eurekaServerUrl:http://administrator:omega@127.0.0.1:7777/eureka/}
   instance:
     # 将ip注册到Eureka中
     prefer-ip-address: true
-    ip-address: 127.0.0.1
+    ip-address: ${eurekaClientIp:127.0.0.1}
 
 # 配置路由服务网关
 zuul:
