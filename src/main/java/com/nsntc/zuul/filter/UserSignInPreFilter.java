@@ -64,7 +64,7 @@ public class UserSignInPreFilter extends ZuulFilter {
      */
     @Override
     public int filterOrder() {
-        return 0;
+        return 1;
     }
 
     /**
@@ -105,8 +105,13 @@ public class UserSignInPreFilter extends ZuulFilter {
      * Create DateTime: 2017/12/18 上午12:51
      */
     private void checkUserToken() {
+
         RequestContext requestContext = RequestContext.getCurrentContext();
         String cookieValue = RequestUtil.getCookieValue(CookieConstant.COOKIE_KEY);
+        /** cookie不存在 */
+        if (StringUtils.isEmpty(cookieValue)) {
+            throw new ApplicationException(ResultEnum.COOKIE_NOT_EXIST);
+        }
 
         /** sso微服务 */
         Result result = this.ssoApiService.getUserByToken(cookieValue);

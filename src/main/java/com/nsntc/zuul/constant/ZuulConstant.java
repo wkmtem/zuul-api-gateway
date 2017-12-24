@@ -18,5 +18,4 @@ public interface ZuulConstant {
      * 忽略过滤地址前缀
      */
     String FILTER_IGNORE_PREFIX = "/sso/";
-
 }
