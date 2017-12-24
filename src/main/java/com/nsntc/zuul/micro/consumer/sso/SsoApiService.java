@@ -2,7 +2,7 @@ package com.nsntc.zuul.micro.consumer.sso;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.nsntc.interview.commons.enums.ResultEnum;
-import com.nsntc.zuul.micro.consumer.feign.SsoApiFeignClient;
+import com.nsntc.zuul.micro.consumer.sso.feign.SsoApiFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
