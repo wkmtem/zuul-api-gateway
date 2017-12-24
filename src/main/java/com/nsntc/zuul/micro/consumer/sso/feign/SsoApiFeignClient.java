@@ -4,9 +4,6 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Map;
 
 /**
  * Class Name: SsoApiFeignClient
@@ -28,13 +25,4 @@ public interface SsoApiFeignClient {
      */
     @RequestMapping(value = "sso/api/user/{token}", method = RequestMethod.GET)
     String getUserByToken(@PathVariable("token") String token);
-
-    /**
-     * Method Name: saveOperationLog
-     * Description: 保存操作日志
-     * Create DateTime: 2017/12/19 上午1:19
-     * @param param
-     */
-    @RequestMapping(value = "sso/api/operation", method = RequestMethod.POST)
-    void saveOperationLog(@RequestParam Map<String, Object> param);
 }

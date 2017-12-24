@@ -19,16 +19,4 @@ public interface ZuulConstant {
      */
     String FILTER_IGNORE_PREFIX = "/sso/";
 
-    String REQUEST_URI = "request_uri";
-
-    String REQUEST_IP = "request_ip";
-
-    String REQUEST_USER = "request_user";
-
-    String REQUEST_TIME = "request_time";
-
-    String REQUEST_PARAM = "request_param";
-
-    String REQUEST_USER_AGENT = "request_user_agent";
-
 }

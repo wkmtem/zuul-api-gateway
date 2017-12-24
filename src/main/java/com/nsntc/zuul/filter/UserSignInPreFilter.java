@@ -2,13 +2,15 @@ package com.nsntc.zuul.filter;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
+import com.nsntc.commons.bean.Result;
 import com.nsntc.commons.enums.ZuulFilterTypeEnum;
 import com.nsntc.commons.exception.ApplicationException;
 import com.nsntc.commons.utils.GsonUtil;
 import com.nsntc.commons.utils.RequestUtil;
+import com.nsntc.interview.commons.bean.RedisUser;
 import com.nsntc.interview.commons.constant.CookieConstant;
+import com.nsntc.interview.commons.enums.MicroEnum;
 import com.nsntc.interview.commons.enums.ResultEnum;
-import com.nsntc.zuul.bean.RedisUser;
 import com.nsntc.zuul.constant.ZuulConstant;
 import com.nsntc.zuul.micro.consumer.sso.SsoApiService;
 import org.apache.commons.lang3.StringUtils;
@@ -87,15 +89,9 @@ public class UserSignInPreFilter extends ZuulFilter {
         boolean flag = false;
         RequestContext requestContext = RequestContext.getCurrentContext();
         String uri = requestContext.getRequest().getRequestURI().toString();
-        String userAgent = requestContext.getRequest().getHeader("user-agent");
-        Map<String, String[]> parameterMap = requestContext.getRequest().getParameterMap();
+
         /** 非/sso/开头, 过滤 */
         if (!StringUtils.startsWithIgnoreCase(uri, ZuulConstant.FILTER_IGNORE_PREFIX)) {
-            requestContext.set(ZuulConstant.REQUEST_URI, uri);
-            requestContext.set(ZuulConstant.REQUEST_IP, RequestUtil.getRequest().getRemoteAddr());
-            requestContext.set(ZuulConstant.REQUEST_USER_AGENT, userAgent);
-            requestContext.set(ZuulConstant.REQUEST_TIME, System.currentTimeMillis());
-            requestContext.set(ZuulConstant.REQUEST_PARAM, parameterMap);
             flag = true;
         }
         /** 向下传递"是否过滤" */
@@ -111,25 +107,20 @@ public class UserSignInPreFilter extends ZuulFilter {
     private void checkUserToken() {
         RequestContext requestContext = RequestContext.getCurrentContext();
         String cookieValue = RequestUtil.getCookieValue(CookieConstant.COOKIE_KEY);
-        /** redis微服务 */
-        String jsonValue = this.ssoApiService.getUserByToken(cookieValue);
 
-        /** 返回用户为空 */
-        if (StringUtils.isEmpty(jsonValue)) {
+        /** sso微服务 */
+        Result result = this.ssoApiService.getUserByToken(cookieValue);
+        /** 未登录 */
+        if (ResultEnum.USER_ACCOUNT_NOT_LOGIN.getCode().equals(result.getCode())) {
             /** 拦截请求, 不对其进行路由 */
             requestContext.setSendZuulResponse(false);
             throw new ApplicationException(ResultEnum.USER_ACCOUNT_NOT_LOGIN);
-        /** 容错机制 */
-        } else if (StringUtils.equals(ResultEnum.SYSTEM_ERROR.getMessage(), jsonValue)) {
+        }
+        /** 熔断 */
+        else if (MicroEnum.MICRO_FAILED.getCode().equals(result.getCode())) {
             /** 拦截请求, 不对其进行路由 */
             requestContext.setSendZuulResponse(false);
-            throw new ApplicationException(ResultEnum.SYSTEM_ERROR);
-        }
-
-        try {
-            requestContext.set(ZuulConstant.REQUEST_USER, GsonUtil.toObject(jsonValue, RedisUser.class));
-        } catch (Exception e) {
-            throw new HttpMessageNotReadableException(ResultEnum.JSON_CONVERT_FAILURE.getMessage());
+            throw new ApplicationException(MicroEnum.MICRO_FAILED);
         }
 
         /** 放行请求, 对其进行路由 */

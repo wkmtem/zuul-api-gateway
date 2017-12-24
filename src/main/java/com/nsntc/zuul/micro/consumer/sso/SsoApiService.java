@@ -1,12 +1,14 @@
 package com.nsntc.zuul.micro.consumer.sso;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.nsntc.commons.bean.Result;
+import com.nsntc.interview.commons.enums.MicroEnum;
 import com.nsntc.interview.commons.enums.ResultEnum;
+import com.nsntc.interview.commons.utils.ResultUtil;
 import com.nsntc.zuul.micro.consumer.sso.feign.SsoApiFeignClient;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 /**
  * Class Name: SsoApiService
@@ -30,8 +32,12 @@ public class SsoApiService {
      * @return
      */
     @HystrixCommand(fallbackMethod = "getUserByTokenFallback")
-    public String getUserByToken (String token) {
-        return this.ssoApiFeignClient.getUserByToken(token);
+    public Result getUserByToken (String token) {
+        String jsonValue = this.ssoApiFeignClient.getUserByToken(token);
+        if (StringUtils.isEmpty(jsonValue)) {
+            return ResultUtil.error(ResultEnum.USER_ACCOUNT_NOT_LOGIN);
+        }
+        return ResultUtil.success(jsonValue);
     }
 
     /**
@@ -41,28 +47,7 @@ public class SsoApiService {
      * @param token
      * @return
      */
-    public String getUserByTokenFallback(String token) {
-        return ResultEnum.SYSTEM_ERROR.getMessage();
-    }
-
-
-    /**
-     * Method Name: saveOperationLog
-     * Description:
-     * Create DateTime: 2017/12/19 上午1:22
-     * @param param
-     */
-    @HystrixCommand(fallbackMethod = "saveOperationLogFallback")
-    public void saveOperationLog(Map<String, Object> param) {
-        this.ssoApiFeignClient.saveOperationLog(param);
-    }
-
-    /**
-     * Method Name: saveOperationLogFallback
-     * Description: 容错
-     * Create DateTime: 2017/12/19 上午1:23
-     */
-    public void saveOperationLogFallback(Map<String, Object> param) {
-
+    public Result getUserByTokenFallback(String token) {
+        return ResultUtil.error(MicroEnum.MICRO_FAILED);
     }
 }
