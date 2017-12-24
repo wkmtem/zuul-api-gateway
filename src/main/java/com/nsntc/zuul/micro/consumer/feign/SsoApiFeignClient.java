@@ -1,4 +1,4 @@
-package com.nsntc.zuul.feign;
+package com.nsntc.zuul.micro.consumer.feign;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,14 +10,14 @@ import java.util.Map;
 
 /**
  * Class Name: SsoFeignClient
- * Package: com.spring.cloud.feign
+ * Package: com.nsntc.zuul.micro.consumer.feign
  * Description: 申明Feign客户端, 并指明服务id
  * @author wkm
- * Create DateTime: 2017/12/16 上午2:16
+ * Create DateTime: 2017/12/24 下午11:09
  * Version: 1.0
  */
-@FeignClient(value = "sb-interview-sso")
-public interface SsoFeignClient {
+@FeignClient(value = "interview-sso")
+public interface SsoApiFeignClient {
 
     /**
      * Method Name: getUserByToken

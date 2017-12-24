@@ -10,7 +10,7 @@ import com.nsntc.interview.commons.constant.CookieConstant;
 import com.nsntc.interview.commons.enums.ResultEnum;
 import com.nsntc.zuul.bean.RedisUser;
 import com.nsntc.zuul.constant.ZuulConstant;
-import com.nsntc.zuul.service.microapi.SsoApiService;
+import com.nsntc.zuul.micro.consumer.sso.SsoApiService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.HttpMessageNotReadableException;

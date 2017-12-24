@@ -1,8 +1,8 @@
-package com.nsntc.zuul.service.microapi;
+package com.nsntc.zuul.micro.consumer.sso;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.nsntc.interview.commons.enums.ResultEnum;
-import com.nsntc.zuul.feign.SsoFeignClient;
+import com.nsntc.zuul.micro.consumer.feign.SsoApiFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,17 +10,17 @@ import java.util.Map;
 
 /**
  * Class Name: SsoApiService
- * Package: com.nsntc.zuul.service.microapi
+ * Package: com.nsntc.zuul.micro.consumer.sso
  * Description: 微服务接口调用
  * @author wkm
- * Create DateTime: 2017/12/18 下午8:04
+ * Create DateTime: 2017/12/24 下午11:05
  * Version: 1.0
  */
 @Service
 public class SsoApiService {
 
     @Autowired
-    private SsoFeignClient ssoFeignClient;
+    private SsoApiFeignClient ssoApiFeignClient;
 
     /**
      * Method Name: getUserByToken
@@ -31,7 +31,7 @@ public class SsoApiService {
      */
     @HystrixCommand(fallbackMethod = "getUserByTokenFallback")
     public String getUserByToken (String token) {
-        return this.ssoFeignClient.getUserByToken(token);
+        return this.ssoApiFeignClient.getUserByToken(token);
     }
 
     /**
@@ -54,7 +54,7 @@ public class SsoApiService {
      */
     @HystrixCommand(fallbackMethod = "saveOperationLogFallback")
     public void saveOperationLog(Map<String, Object> param) {
-        this.ssoFeignClient.saveOperationLog(param);
+        this.ssoApiFeignClient.saveOperationLog(param);
     }
 
     /**

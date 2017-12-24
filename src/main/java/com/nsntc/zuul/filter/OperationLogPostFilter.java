@@ -6,7 +6,7 @@ import com.nsntc.commons.enums.ZuulFilterTypeEnum;
 import com.nsntc.commons.utils.GsonUtil;
 import com.nsntc.zuul.bean.RedisUser;
 import com.nsntc.zuul.constant.ZuulConstant;
-import com.nsntc.zuul.service.microapi.SsoApiService;
+import com.nsntc.zuul.micro.consumer.sso.SsoApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

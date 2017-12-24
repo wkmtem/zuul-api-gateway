@@ -35,7 +35,7 @@ zuul:
       serviceId: interview-sso
 
     # api server name
-    sb-test:
-      path: /test/**
+    interview-system:
+      path: /sys/**
       strip-prefix: false
-      serviceId: sb-test
+      serviceId: iinterview-system
