@@ -1,7 +1,7 @@
 package com.nsntc.zuul.service.microapi;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.nsntc.commons.enums.ResultEnum;
+import com.nsntc.interview.commons.enums.ResultEnum;
 import com.nsntc.zuul.feign.SsoFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

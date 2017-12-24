@@ -2,11 +2,12 @@ package com.nsntc.zuul.filter;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.nsntc.commons.enums.ResultEnum;
 import com.nsntc.commons.enums.ZuulFilterTypeEnum;
 import com.nsntc.commons.exception.ApplicationException;
 import com.nsntc.commons.utils.GsonUtil;
 import com.nsntc.commons.utils.RequestUtil;
+import com.nsntc.interview.commons.constant.CookieConstant;
+import com.nsntc.interview.commons.enums.ResultEnum;
 import com.nsntc.zuul.bean.RedisUser;
 import com.nsntc.zuul.constant.ZuulConstant;
 import com.nsntc.zuul.service.microapi.SsoApiService;
@@ -109,7 +110,7 @@ public class UserSignInPreFilter extends ZuulFilter {
      */
     private void checkUserToken() {
         RequestContext requestContext = RequestContext.getCurrentContext();
-        String cookieValue = RequestUtil.getCookieValue(ZuulConstant.COOKIE_KEY);
+        String cookieValue = RequestUtil.getCookieValue(CookieConstant.COOKIE_KEY);
         /** redis微服务 */
         String jsonValue = this.ssoApiService.getUserByToken(cookieValue);
 

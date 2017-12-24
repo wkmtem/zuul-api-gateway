@@ -24,7 +24,7 @@ zuul:
   # 路由
   routes:
     # api server name
-    sb-interview-sso:
+    interview-sso:
       # 请求策略
       path: /sso/**
       # 开启/关闭剥离前缀(false: /sso/login --> /sso/login, true: /sso/login --> /login)
@@ -32,7 +32,7 @@ zuul:
       # 请求地址
       #url: http://127.0.0.1:8088/
       # 面向服务策略, 指定Eureka注册中心服务id
-      serviceId: sb-interview-sso
+      serviceId: interview-sso
 
     # api server name
     sb-test:

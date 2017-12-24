@@ -19,8 +19,6 @@ public interface ZuulConstant {
      */
     String FILTER_IGNORE_PREFIX = "/sso/";
 
-    String COOKIE_KEY = "SSO_TOKEN";
-
     String REQUEST_URI = "request_uri";
 
     String REQUEST_IP = "request_ip";
