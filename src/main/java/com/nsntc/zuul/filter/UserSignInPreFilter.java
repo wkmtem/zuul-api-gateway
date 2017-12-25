@@ -124,7 +124,6 @@ public class UserSignInPreFilter extends ZuulFilter {
         }
         /** 熔断 */
         else if (MicroEnum.MICRO_FAILED.getCode().equals(result.getCode())) {
-            /** 拦截请求, 不对其进行路由 */
             requestContext.setSendZuulResponse(false);
             throw new ApplicationException(MicroEnum.MICRO_FAILED);
         }
