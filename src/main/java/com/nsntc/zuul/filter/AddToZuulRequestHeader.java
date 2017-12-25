@@ -55,7 +55,7 @@ public class AddToZuulRequestHeader extends ZuulFilter {
         String remoteAddr = request.getRemoteAddr();
 
         /** Pass remote address downstream by setting X-Forwarded for header again on Zuul request */
-        log.info("[Remote Addr is] >>> {{}}", remoteAddr);
+        log.info("[Remote Addr] >>> {{}}", remoteAddr);
         requestContext.getZuulRequestHeaders().put(SystemConstant.ZUUL_REMOTE_ADDR, remoteAddr);
     }
 }

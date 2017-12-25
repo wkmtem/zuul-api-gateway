@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
  * Version: 1.0
  */
 @Component
-@Slf4j
 public class OperationLogPostFilter extends ZuulFilter {
 
     @Override
