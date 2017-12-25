@@ -67,25 +67,25 @@ public class ErrorZuulFilter extends ZuulFilter {
             Exception exception = (Exception) requestContext.getThrowable().getCause();
             if (exception instanceof ApplicationException) {
                 ApplicationException e = (ApplicationException) exception;
-                log.error("[错误代码] >>> {{}}, [错误信息] >>> {{}}", e.getCode(), e.getMessage());
+                log.error("[Zuul异常过滤器] >>> {{}}, [错误信息] >>> {{}}", e.getCode(), e.getMessage());
                 responseBody = GsonUtil.toJson(ResultUtil.error(e.getCode(), e.getMessage()));
                 requestContext.setResponseBody(responseBody);
             }
             else if (exception instanceof HttpMessageNotReadableException) {
                 HttpMessageNotReadableException e = (HttpMessageNotReadableException) exception;
-                log.error("[JSON转换错误] >>> {{}}", e.getMessage(), e);
+                log.error("[Zuul异常过滤器] >>> {{}}", e.getMessage(), e);
                 responseBody = GsonUtil.toJson(ResultUtil.error(ResultEnum.JSON_CONVERT_FAILURE));
                 requestContext.setResponseBody(responseBody);
             }
             else {
-                log.error("[错误警告] >>> {{}}", exception.getMessage(), exception);
+                log.error("[Zuul异常过滤器] >>> {{}}", exception.getMessage(), exception);
                 responseBody = GsonUtil.toJson(ResultUtil.error(ResultEnum.SYSTEM_ERROR));
                 requestContext.setResponseBody(responseBody);
             }
             /** 移除 ZuulException */
             requestContext.remove(ZuulConstant.THROWABLE_KEY);
         } catch (Exception e) {
-            log.error("[未定义错误] >>> {{}}", e.getMessage(), e);
+            log.error("[Zuul异常过滤器] >>> {{}}", e.getMessage(), e);
             rethrowRuntimeException(e);
         }
     }

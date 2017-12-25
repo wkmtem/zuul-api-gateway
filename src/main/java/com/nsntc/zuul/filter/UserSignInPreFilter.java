@@ -13,6 +13,7 @@ import com.nsntc.interview.commons.enums.MicroEnum;
 import com.nsntc.interview.commons.enums.ResultEnum;
 import com.nsntc.zuul.constant.ZuulConstant;
 import com.nsntc.zuul.micro.consumer.sso.SsoApiService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -29,6 +30,7 @@ import java.util.Map;
  * Version: 1.0
  */
 @Component
+@Slf4j
 public class UserSignInPreFilter extends ZuulFilter {
 
     @Autowired
@@ -110,6 +112,7 @@ public class UserSignInPreFilter extends ZuulFilter {
         String cookieValue = RequestUtil.getCookieValue(CookieConstant.COOKIE_KEY);
         /** cookie不存在 */
         if (StringUtils.isEmpty(cookieValue)) {
+            log.error("[Zuul校验用户token过滤器] >>> {{}}", ResultEnum.COOKIE_NOT_EXIST.getMessage());
             throw new ApplicationException(ResultEnum.COOKIE_NOT_EXIST);
         }
 
@@ -119,12 +122,14 @@ public class UserSignInPreFilter extends ZuulFilter {
         if (ResultEnum.USER_ACCOUNT_NOT_LOGIN.getCode().equals(result.getCode())) {
             /** 拦截请求, 不对其进行路由 */
             requestContext.setSendZuulResponse(false);
+            log.error("[Zuul校验用户token过滤器] >>> {{}}", ResultEnum.USER_ACCOUNT_NOT_LOGIN.getMessage());
             throw new ApplicationException(ResultEnum.USER_ACCOUNT_NOT_LOGIN);
         }
         /** 熔断 */
         else if (MicroEnum.MICRO_FAILED.getCode().equals(result.getCode())) {
             /** 拦截请求, 不对其进行路由 */
             requestContext.setSendZuulResponse(false);
+            log.error("[Zuul校验用户token过滤器] >>> {{}}", MicroEnum.MICRO_FAILED.getMessage());
             throw new ApplicationException(MicroEnum.MICRO_FAILED);
         }
 
