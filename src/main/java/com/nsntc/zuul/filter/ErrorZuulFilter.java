@@ -2,10 +2,12 @@ package com.nsntc.zuul.filter;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
+import com.netflix.zuul.exception.ZuulException;
 import com.nsntc.commons.constant.SystemConstant;
 import com.nsntc.commons.enums.ZuulFilterTypeEnum;
 import com.nsntc.commons.exception.ApplicationException;
 import com.nsntc.commons.utils.GsonUtil;
+import com.nsntc.interview.commons.enums.MicroEnum;
 import com.nsntc.interview.commons.enums.ResultEnum;
 import com.nsntc.interview.commons.utils.ResultUtil;
 import com.nsntc.zuul.constant.ZuulConstant;

@@ -116,18 +116,18 @@ public class UserSignInPreFilter extends ZuulFilter {
 
         /** sso微服务 */
         Result result = this.ssoApiService.getUserByToken(cookieValue);
-        /** 未登录 */
-        if (ResultEnum.USER_ACCOUNT_NOT_LOGIN.getCode().equals(result.getCode())) {
-            /** 拦截请求, 不对其进行路由 */
-            requestContext.setSendZuulResponse(false);
-            throw new ApplicationException(ResultEnum.USER_ACCOUNT_NOT_LOGIN);
+        /** json转换异常 */
+        if (ResultEnum.JSON_CONVERT_FAILURE.getCode().equals(result.getCode())) {
+            throw new HttpMessageNotReadableException(ResultEnum.JSON_CONVERT_FAILURE.getMessage());
         }
         /** 熔断 */
         else if (MicroEnum.MICRO_FAILED.getCode().equals(result.getCode())) {
-            requestContext.setSendZuulResponse(false);
             throw new ApplicationException(MicroEnum.MICRO_FAILED);
         }
 
+        if (null == result.getData()) {
+            throw new ApplicationException(ResultEnum.USER_ACCOUNT_NOT_LOGIN);
+        }
         /** 放行请求, 对其进行路由 */
         requestContext.setSendZuulResponse(true);
     }
