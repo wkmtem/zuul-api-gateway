@@ -2,12 +2,10 @@ package com.nsntc.zuul.filter;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.netflix.zuul.exception.ZuulException;
 import com.nsntc.commons.constant.SystemConstant;
 import com.nsntc.commons.enums.ZuulFilterTypeEnum;
 import com.nsntc.commons.exception.ApplicationException;
 import com.nsntc.commons.utils.GsonUtil;
-import com.nsntc.interview.commons.enums.MicroEnum;
 import com.nsntc.interview.commons.enums.ResultEnum;
 import com.nsntc.interview.commons.utils.ResultUtil;
 import com.nsntc.zuul.constant.ZuulConstant;
@@ -66,7 +64,7 @@ public class ErrorZuulFilter extends ZuulFilter {
             /** Http响应码 */
             requestContext.setResponseStatusCode(HttpServletResponse.SC_OK);
 
-            Exception exception = (Exception) requestContext.getThrowable().getCause();
+            Throwable exception = requestContext.getThrowable().getCause();
             if (exception instanceof ApplicationException) {
                 ApplicationException e = (ApplicationException) exception;
                 log.error("[Zuul异常过滤器] >>> {{}}, [错误信息] >>> {{}}", e.getCode(), e.getMessage());
