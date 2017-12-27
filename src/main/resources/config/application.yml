@@ -7,6 +7,6 @@ spring:
 
 zuul:
   # 转发所有header(全局路由)
-  #sensitive-headers: *
+  #sensitive-headers: '*'
 
 

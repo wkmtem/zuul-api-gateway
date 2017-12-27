@@ -20,7 +20,7 @@ eureka:
 # 配置路由服务网关
 zuul:
   # 忽略所有微服务, 由路由指定
-  ignored-services: *
+  ignored-services: '*'
   # 路由
   routes:
     # api server name
@@ -37,7 +37,7 @@ zuul:
     # api server name
     interview-system:
       # 转发所有header(单路由)
-      sensitive-headers: *
+      sensitive-headers: '*'
       path: /sys/**
       strip-prefix: false
-      serviceId: iinterview-system
+      serviceId: interview-system
