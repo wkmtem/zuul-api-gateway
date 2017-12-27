@@ -115,8 +115,12 @@ public class UserSignInPreFilter extends ZuulFilter {
         }
         /** sso微服务 */
         Result result = this.ssoApiService.getUserByToken(cookieValue);
+        /** token长度错误 */
+        if (ResultEnum.PARAM_ERROR.getCode().equals(result.getCode())) {
+            throw new ApplicationException(ResultEnum.PARAM_ERROR.getCode(), result.getMsg());
+        }
         /** 熔断 */
-        if (MicroEnum.MICRO_FAILED.getCode().equals(result.getCode())) {
+        else if (MicroEnum.MICRO_FAILED.getCode().equals(result.getCode())) {
             throw new ApplicationException(MicroEnum.MICRO_FAILED);
         }
         /** 未登录 */

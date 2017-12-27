@@ -4,6 +4,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.nsntc.commons.bean.Result;
 import com.nsntc.commons.utils.GsonUtil;
 import com.nsntc.interview.commons.enums.MicroEnum;
+import com.nsntc.interview.commons.enums.ResultEnum;
 import com.nsntc.interview.commons.utils.ResultUtil;
 import com.nsntc.zuul.micro.consumer.sso.feign.SsoApiFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,11 @@ public class SsoApiService {
     @HystrixCommand(fallbackMethod = "getUserByTokenFallback")
     public Result getUserByToken (String token) {
         String jsonValue = this.ssoApiFeignClient.getUserByToken(token);
-        return ResultUtil.success(GsonUtil.toObject(jsonValue, Result.class).getData());
+        Result result = GsonUtil.toObject(jsonValue, Result.class);
+        if (ResultEnum.PARAM_ERROR.getCode().equals(result.getCode())) {
+            return ResultUtil.error(ResultEnum.PARAM_ERROR.getCode(), result.getMsg());
+        }
+        return ResultUtil.success(result.getData());
     }
 
     /**
