@@ -3,7 +3,7 @@ spring:
     name: zuul-api-gateway
 
   profiles:
-    active: ubuntu
+    active: local
 
 zuul:
   # 转发所有header(全局路由)
