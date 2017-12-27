@@ -1,0 +1,43 @@
+server:
+  port: ${port:80}
+
+# Eureka Client
+eureka:
+  client:
+    # 是否将自己注册到Eureka服务中, default: true
+    register-with-eureka: true
+    # 是否从Eureka中获取注册信息, default: true
+    fetch-registry: true
+    # Eureka client 与 server 交互地址(已配置安全认证)
+    service-url:
+      # 集群时, 可指定一个, 也可指定多个(","隔开)
+      defaultZone: ${eurekaServerUrl:http://administrator:omega@127.0.0.1:7777/eureka/}
+  instance:
+    # 将ip注册到Eureka中
+    prefer-ip-address: true
+    ip-address: ${eurekaClientIp:127.0.0.1}
+
+# 配置路由服务网关
+zuul:
+  # 忽略所有微服务, 由路由指定
+  ignored-services: '*'
+  # 路由
+  routes:
+    # api server name
+    interview-sso:
+      # 请求策略
+      path: /sso/**
+      # 开启/关闭剥离前缀(false: /sso/login --> /sso/login, true: /sso/login --> /login)
+      strip-prefix: false
+      # 请求地址
+      #url: http://127.0.0.1:8088/
+      # 面向服务策略, 指定Eureka注册中心服务id
+      serviceId: interview-sso
+
+    # api server name
+    interview-system:
+      # 转发所有header(单路由)
+      sensitive-headers: '*'
+      path: /sys/**
+      strip-prefix: false
+      serviceId: interview-system
