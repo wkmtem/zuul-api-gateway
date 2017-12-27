@@ -15,7 +15,7 @@ eureka:
   instance:
     # 将ip注册到Eureka中
     prefer-ip-address: true
-    ip-address: ${eurekaClientIp:127.0.0.1}
+    ip-address: ${eurekaClientIp:192.168.0.201}
 
 # 配置路由服务网关
 zuul:
