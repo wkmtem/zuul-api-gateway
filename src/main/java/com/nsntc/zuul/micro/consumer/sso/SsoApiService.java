@@ -2,15 +2,11 @@ package com.nsntc.zuul.micro.consumer.sso;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.nsntc.commons.bean.Result;
-import com.nsntc.commons.exception.ApplicationException;
 import com.nsntc.commons.utils.GsonUtil;
 import com.nsntc.interview.commons.enums.MicroEnum;
-import com.nsntc.interview.commons.enums.ResultEnum;
 import com.nsntc.interview.commons.utils.ResultUtil;
 import com.nsntc.zuul.micro.consumer.sso.feign.SsoApiFeignClient;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -36,15 +32,8 @@ public class SsoApiService {
      */
     @HystrixCommand(fallbackMethod = "getUserByTokenFallback")
     public Result getUserByToken (String token) {
-
-        Result result = null;
         String jsonValue = this.ssoApiFeignClient.getUserByToken(token);
-        try {
-            result = GsonUtil.toObject(jsonValue, Result.class);
-        } catch (Exception e) {
-            return ResultUtil.error(ResultEnum.JSON_CONVERT_FAILURE);
-        }
-        return ResultUtil.success(result.getData());
+        return ResultUtil.success(GsonUtil.toObject(jsonValue, Result.class).getData());
     }
 
     /**

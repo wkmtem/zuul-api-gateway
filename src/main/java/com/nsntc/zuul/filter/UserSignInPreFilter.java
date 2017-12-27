@@ -113,18 +113,13 @@ public class UserSignInPreFilter extends ZuulFilter {
         if (StringUtils.isEmpty(cookieValue)) {
             throw new ApplicationException(ResultEnum.COOKIE_NOT_EXIST);
         }
-
         /** sso微服务 */
         Result result = this.ssoApiService.getUserByToken(cookieValue);
-        /** json转换异常 */
-        if (ResultEnum.JSON_CONVERT_FAILURE.getCode().equals(result.getCode())) {
-            throw new HttpMessageNotReadableException(ResultEnum.JSON_CONVERT_FAILURE.getMessage());
-        }
         /** 熔断 */
-        else if (MicroEnum.MICRO_FAILED.getCode().equals(result.getCode())) {
+        if (MicroEnum.MICRO_FAILED.getCode().equals(result.getCode())) {
             throw new ApplicationException(MicroEnum.MICRO_FAILED);
         }
-
+        /** 未登录 */
         if (null == result.getData()) {
             throw new ApplicationException(ResultEnum.USER_ACCOUNT_NOT_LOGIN);
         }
