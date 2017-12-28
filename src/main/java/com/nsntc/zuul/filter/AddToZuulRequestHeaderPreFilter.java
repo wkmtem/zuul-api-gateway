@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Component
 @Slf4j
-public class AddToZuulRequestHeader extends ZuulFilter {
+public class AddToZuulRequestHeaderPreFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
