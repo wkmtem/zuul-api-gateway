@@ -7,7 +7,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
 /**
- * Class Name: switchYml
+ * Class Name: SwitchYml
  * Package: com.nsntc.zuul.config.yml
  * Description: 全局开关
  * @author wkm
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @RefreshScope
 @SpringBootConfiguration
 @ConfigurationProperties(prefix = "global", ignoreUnknownFields = false)
-public class switchYml {
+public class SwitchYml {
 
     /**
      * true: 开, false: 关

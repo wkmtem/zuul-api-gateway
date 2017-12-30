@@ -11,6 +11,7 @@ import com.nsntc.interview.commons.bean.RedisUser;
 import com.nsntc.interview.commons.constant.CookieConstant;
 import com.nsntc.interview.commons.enums.MicroEnum;
 import com.nsntc.interview.commons.enums.ResultEnum;
+import com.nsntc.zuul.config.yml.SwitchYml;
 import com.nsntc.zuul.constant.ZuulConstant;
 import com.nsntc.zuul.micro.consumer.sso.SsoApiService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,8 @@ import java.util.Map;
 public class UserSignInPreFilter extends ZuulFilter {
 
     @Autowired
+    private SwitchYml switchYml;
+    @Autowired
     private SsoApiService ssoApiService;
 
     /**
@@ -43,7 +46,15 @@ public class UserSignInPreFilter extends ZuulFilter {
      */
     @Override
     public boolean shouldFilter() {
-        return this.ignoreURI();
+
+        RequestContext requestContext = RequestContext.getCurrentContext();
+        if (switchYml.getSwitchVal()) {
+            return this.ignoreURI(requestContext);
+        }
+        /** 向下传递"是否过滤" */
+        requestContext.set(ZuulConstant.NEXT_FILTER, false);
+        return false;
+
     }
 
     /**
@@ -83,12 +94,13 @@ public class UserSignInPreFilter extends ZuulFilter {
     /**
      * Method Name: ignoreURI
      * Description: 是否忽略URI过滤
-     * Create DateTime: 2017/12/18 上午12:31
+     * Create DateTime: 2017/12/30 下午5:54
+     * @param requestContext
      * @return
      */
-    private boolean ignoreURI() {
+    private boolean ignoreURI(RequestContext requestContext) {
+
         boolean flag = false;
-        RequestContext requestContext = RequestContext.getCurrentContext();
         String uri = requestContext.getRequest().getRequestURI().toString();
 
         /** 非/sso/开头, 过滤 */
