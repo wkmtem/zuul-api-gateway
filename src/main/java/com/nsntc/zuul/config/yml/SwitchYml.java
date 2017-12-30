@@ -24,5 +24,5 @@ public class SwitchYml {
     /**
      * true: 开, false: 关
      */
-    private Boolean switchVal;
+    private Boolean switchVal = true;
 }
