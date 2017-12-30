@@ -33,6 +33,13 @@
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 
+		<!-- Spring Boot Configuration -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+
 		<!-- Netflix Eureka 注册发现(包含com.squareup.okhttp3 3.8.1组件, 引用即可) -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -50,6 +57,23 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-zuul</artifactId>
+		</dependency>
+
+		<!-- Cloud Config Client -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+		<!-- Cloud Config Client Refresh -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<!-- 消息总线: RabbitMQ实现AMQP协议, 由Config-Server负责同步 -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-bus-amqp</artifactId>
 		</dependency>
 
 		<dependency>

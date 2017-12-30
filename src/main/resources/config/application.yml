@@ -2,10 +2,10 @@ spring:
   application:
     name: zuul-api-gateway
 
-  profiles:
-    active: dev
+  #profiles:
+    #active: dev
 
-zuul:
+#zuul:
   # 转发所有header(全局路由)
   #sensitive-headers: '*'
 
