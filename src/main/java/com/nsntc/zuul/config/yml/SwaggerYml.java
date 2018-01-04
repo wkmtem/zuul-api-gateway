@@ -1,4 +1,4 @@
-package com.nsntc.zuul.properties;
+package com.nsntc.zuul.config.yml;
 
 import lombok.Data;
 import org.springframework.boot.SpringBootConfiguration;
@@ -6,6 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class Name: SwaggerYml
@@ -20,8 +23,7 @@ import org.springframework.stereotype.Component;
 @RefreshScope
 @SpringBootConfiguration
 @ConfigurationProperties(prefix = "swagger", ignoreUnknownFields = false)
-@PropertySource(value = {"classpath:properties/swagger.properties"}, encoding = "UTF-8")
-public class SwaggerProperties {
+public class SwaggerYml {
 
     private String title;
     private String description;
@@ -32,4 +34,6 @@ public class SwaggerProperties {
     private String email;
     private String license;
     private String licenseUrl;
+
+    private Map<String, String> resource = new HashMap<>(4);
 }

@@ -1,7 +1,7 @@
 package com.nsntc.zuul.swagger;
 
 import com.nsntc.commons.constant.SwaggerConstant;
-import com.nsntc.zuul.properties.SwaggerProperties;
+import com.nsntc.zuul.config.yml.SwaggerYml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +30,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
-    private SwaggerProperties swaggerProperties;
+    private SwaggerYml swaggerYml;
 
     /**
      * Method Name: swaggerSpringfoxDocket
@@ -85,15 +85,15 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
      */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title(this.swaggerProperties.getTitle())
-                .description(this.swaggerProperties.getDescription())
-                .version(this.swaggerProperties.getApiVersion())
-                .termsOfServiceUrl(this.swaggerProperties.getBaseUrl())
-                .contact(new Contact(this.swaggerProperties.getCreatedBy(),
-                        this.swaggerProperties.getUrl(),
-                        this.swaggerProperties.getEmail()))
-                .license(this.swaggerProperties.getLicense())
-                .licenseUrl(this.swaggerProperties.getLicenseUrl())
+                .title(this.swaggerYml.getTitle())
+                .description(this.swaggerYml.getDescription())
+                .version(this.swaggerYml.getApiVersion())
+                .termsOfServiceUrl(this.swaggerYml.getBaseUrl())
+                .contact(new Contact(this.swaggerYml.getCreatedBy(),
+                        this.swaggerYml.getUrl(),
+                        this.swaggerYml.getEmail()))
+                .license(this.swaggerYml.getLicense())
+                .licenseUrl(this.swaggerYml.getLicenseUrl())
                 .build();
     }
 }

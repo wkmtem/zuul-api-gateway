@@ -1,5 +1,8 @@
 package com.nsntc.zuul.swagger;
 
+import com.nsntc.zuul.config.yml.SwaggerYml;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Primary;
 import springfox.documentation.swagger.web.SwaggerResource;
@@ -20,6 +23,9 @@ import java.util.List;
 @SpringBootConfiguration
 public class DocumentationConfig implements SwaggerResourcesProvider {
 
+    @Autowired
+    private SwaggerYml swaggerYml;
+
     /**
      * Method Name: get
      * Description: 获取资源路径
@@ -28,9 +34,25 @@ public class DocumentationConfig implements SwaggerResourcesProvider {
      */
     @Override
     public List<SwaggerResource> get() {
-        List resources = new ArrayList(4);
-        resources.add(swaggerResource("注册登录系统", "/sso/v2/api-docs", "1.0"));
-        resources.add(swaggerResource("菜单权限系统", "/sys/v2/api-docs", "1.0"));
+        String names = this.swaggerYml.getResource().get("names");
+        String locations = this.swaggerYml.getResource().get("locations");
+        String versions = this.swaggerYml.getResource().get("versions");
+
+        List<SwaggerResource> resources = null;
+        String[] nameArr = null;
+        String[] locationArr = null;
+        String[] versionArr = null;
+        if (StringUtils.isNotEmpty(names)) {
+            nameArr = StringUtils.split(names, ',');
+            locationArr = StringUtils.split(locations, ',');
+            versionArr = StringUtils.split(versions, ',');
+        }
+        if (null != nameArr && nameArr.length > 0) {
+            resources = new ArrayList<>(nameArr.length);
+            for (int i = 0; i < nameArr.length; i ++) {
+                resources.add(swaggerResource(nameArr[i], locationArr[i], versionArr[i]));
+            }
+        }
         return resources;
     }
 
