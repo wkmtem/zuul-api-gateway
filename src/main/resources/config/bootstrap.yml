@@ -14,8 +14,9 @@ spring:
       discovery:
         enabled: true
         service-id: interview-config-server
-      name: zuul_gateway, switch
+      name: zuul_gateway
       profile: ubuntu
+      #profile: dev
       #label: master
 
   rabbitmq:
