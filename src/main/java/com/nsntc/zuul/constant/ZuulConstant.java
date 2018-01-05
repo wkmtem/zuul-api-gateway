@@ -13,9 +13,4 @@ public interface ZuulConstant {
     String NEXT_FILTER = "next_filter";
 
     String THROWABLE_KEY = "throwable";
-
-    /**
-     * 忽略过滤地址前缀
-     */
-    String FILTER_IGNORE_PREFIX = "/sso/";
 }

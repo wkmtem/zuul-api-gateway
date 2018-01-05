@@ -5,22 +5,15 @@ import com.netflix.zuul.context.RequestContext;
 import com.nsntc.commons.bean.Result;
 import com.nsntc.commons.enums.ZuulFilterTypeEnum;
 import com.nsntc.commons.exception.ApplicationException;
-import com.nsntc.commons.utils.GsonUtil;
 import com.nsntc.commons.utils.RequestUtil;
-import com.nsntc.interview.commons.bean.RedisUser;
 import com.nsntc.interview.commons.constant.CookieConstant;
-import com.nsntc.interview.commons.enums.MicroEnum;
 import com.nsntc.interview.commons.enums.ResultEnum;
-import com.nsntc.zuul.config.yml.SwitchYml;
+import com.nsntc.zuul.config.yml.GlobalYml;
 import com.nsntc.zuul.constant.ZuulConstant;
 import com.nsntc.zuul.micro.consumer.sso.SsoApiService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 /**
  * Class Name: UserSignInPreFilter
@@ -34,7 +27,7 @@ import java.util.Map;
 public class UserSignInPreFilter extends ZuulFilter {
 
     @Autowired
-    private SwitchYml switchYml;
+    private GlobalYml globalYml;
     @Autowired
     private SsoApiService ssoApiService;
 
@@ -48,7 +41,7 @@ public class UserSignInPreFilter extends ZuulFilter {
     public boolean shouldFilter() {
 
         RequestContext requestContext = RequestContext.getCurrentContext();
-        if (switchYml.getSwitchVal()) {
+        if (globalYml.getSwitchVal()) {
             return this.ignoreURI(requestContext);
         }
         /** 向下传递"是否过滤" */
@@ -100,12 +93,17 @@ public class UserSignInPreFilter extends ZuulFilter {
      */
     private boolean ignoreURI(RequestContext requestContext) {
 
-        boolean flag = false;
+        boolean flag = true;
         String uri = requestContext.getRequest().getRequestURI().toString();
-
-        /** 非/sso/开头, 过滤 */
-        if (!StringUtils.startsWithIgnoreCase(uri, ZuulConstant.FILTER_IGNORE_PREFIX)) {
-            flag = true;
+        if (StringUtils.isNotEmpty(this.globalYml.getFilterIgnorePrefix())) {
+            String[] filterIgnorePrefixs = StringUtils.split(this.globalYml.getFilterIgnorePrefix(), ',');
+            /** 非/sso/开头, 过滤 */
+            for (String filterIgnorePrefix : filterIgnorePrefixs) {
+                if (StringUtils.startsWithIgnoreCase(uri, StringUtils.trim(filterIgnorePrefix))) {
+                    flag = false;
+                    break;
+                }
+            }
         }
         /** 向下传递"是否过滤" */
         requestContext.set(ZuulConstant.NEXT_FILTER, flag);

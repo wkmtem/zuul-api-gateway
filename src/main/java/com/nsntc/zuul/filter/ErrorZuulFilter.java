@@ -56,7 +56,7 @@ public class ErrorZuulFilter extends ZuulFilter {
      * Create DateTime: 2017/12/18 上午4:08
      */
     private void handleException() {
-        String responseBody = null;
+        String responseBody;
         try {
             RequestContext requestContext = RequestContext.getCurrentContext();
             /** 响应json编码 */

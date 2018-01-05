@@ -7,9 +7,9 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
 /**
- * Class Name: SwitchYml
+ * Class Name: GlobalYml
  * Package: com.nsntc.zuul.config.yml
- * Description: 全局开关
+ * Description: 全局
  * @author wkm
  * Create DateTime: 2017/12/30 下午5:35
  * Version: 1.0
@@ -19,10 +19,15 @@ import org.springframework.stereotype.Component;
 @RefreshScope
 @SpringBootConfiguration
 @ConfigurationProperties(prefix = "global", ignoreUnknownFields = false)
-public class SwitchYml {
+public class GlobalYml {
 
     /**
      * true: 开, false: 关
      */
     private Boolean switchVal = true;
+
+    /**
+     * 忽略过滤地址前缀
+     */
+    private String filterIgnorePrefix;
 }
