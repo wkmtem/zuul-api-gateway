@@ -25,6 +25,8 @@ zuul:
   routes:
     # api server name
     interview-sso:
+      # 转发所有header(单路由)
+      sensitive-headers: '*'
       # 请求策略
       path: /sso/**
       # 开启/关闭剥离前缀(false: /sso/login --> /sso/login, true: /sso/login --> /login)
