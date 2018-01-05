@@ -50,7 +50,8 @@ public class DocumentationConfig implements SwaggerResourcesProvider {
         if (null != nameArr && nameArr.length > 0) {
             resources = new ArrayList<>(nameArr.length);
             for (int i = 0; i < nameArr.length; i ++) {
-                resources.add(swaggerResource(nameArr[i], locationArr[i], versionArr[i]));
+                resources.add(swaggerResource(StringUtils.trim(nameArr[i]),
+                        StringUtils.trim(locationArr[i]), StringUtils.trim(versionArr[i])));
             }
         }
         return resources;
