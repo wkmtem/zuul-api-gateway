@@ -43,3 +43,23 @@ zuul:
       path: /sys/**
       strip-prefix: false
       serviceId: interview-system
+
+swagger:
+  # zuul gateway swagger
+  title: interview
+  description: 面试系统
+  apiVersion: 1.0
+  baseUrl: http://127.0.0.1:8080
+  createdBy: wkm
+  license: www.nsntc.com
+
+  # 微服务 swagger api
+  resource[names]: 注册登录系统, 菜单权限系统
+  resource[locations]: /sso/v2/api-docs, /sys/v2/api-docs
+  resource[versions]: 1.0, 1.0
+
+global:
+  # 全局开关
+  switchVal: false
+  # 忽略过滤地址前缀
+  filterIgnorePrefix: /sso/, /sys/v2/api-docs
