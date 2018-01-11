@@ -61,5 +61,5 @@ swagger:
 global:
   # 全局开关
   switchVal: false
-  # 忽略过滤地址前缀
-  filterIgnorePrefix: /sso/, /sys/v2/api-docs
+  # 白名单地址前缀
+    whitelistPrefix: /sso/, /sys/v2/api-docs

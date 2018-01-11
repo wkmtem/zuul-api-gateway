@@ -29,5 +29,5 @@ public class GlobalYml {
     /**
      * 忽略过滤地址前缀
      */
-    private String filterIgnorePrefix;
+    private String whitelistPrefix;
 }
