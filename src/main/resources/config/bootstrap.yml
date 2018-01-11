@@ -2,9 +2,9 @@ eureka:
   client:
     service-url:
       # ubuntu
-      defaultZone: ${eurekaServerUrl:http://administrator:omega@192.168.0.201:7777/eureka/}
+      #defaultZone: ${eurekaServerUrl:http://administrator:omega@192.168.0.201:7777/eureka/}
       # 139.196.195.162
-      #defaultZone: ${eurekaServerUrl:http://administrator:omega@10.46.31.101:7777/eureka/}
+      defaultZone: ${eurekaServerUrl:http://administrator:omega@10.46.31.101:7777/eureka/}
       # localhost
       #defaultZone: ${eurekaServerUrl:http://administrator:omega@127.0.0.1:7777/eureka/}
 
@@ -15,8 +15,9 @@ spring:
         enabled: true
         service-id: interview-config-server
       name: zuul_gateway
-      profile: ubuntu
-      #profile: dev
+      #profile: ubuntu
+      profile: dev
+      #profile: local
       #label: master
 
   rabbitmq:
