@@ -55,7 +55,7 @@ public class CorsConfig {
     }
 }
 
-/** 方法二: 过滤器, 实测有效 */
+/** 方法二: servlet过滤器方式, 实测有效 */
 /*@SpringBootConfiguration
 public class CorsConfig {
 
