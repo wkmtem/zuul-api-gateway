@@ -21,13 +21,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * Create DateTime: 2018/1/12 下午3:49
  * Version: 1.0
  */
-@SpringBootConfiguration
+/*@SpringBootConfiguration
 public class CorsConfig {
 
     private CorsConfiguration buildConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        /** 可自行筛选 */
+        *//** 可自行筛选 *//*
         corsConfiguration.addAllowedOrigin(CorsConstant.CORS_ALLOWED_ORIGIN);
         corsConfiguration.addAllowedHeader(CorsConstant.CORS_ALLOWED_HEADER);
         corsConfiguration.addAllowedMethod(HttpMethodEnum.GET.getCode());
@@ -46,13 +46,13 @@ public class CorsConfig {
         source.registerCorsConfiguration(CorsConstant.CORS_MAPPING_PATH, buildConfig());
         return new CorsFilter(source);
     }
-}
+}*/
 
 /** 方法二: 能请求，返回有数据
  *  提示 No 'Access-Control-Allow-Origin’ header is present on the requested resource.
  *      Origin 'http://localhost:63342' is therefore not allowed.
  */
-/*@SpringBootConfiguration
+@SpringBootConfiguration
 public class CorsConfig {
 
     @Bean
@@ -64,19 +64,19 @@ public class CorsConfig {
                         .allowedOrigins(CorsConstant.CORS_ALLOWED_ORIGIN)
                         .allowedHeaders(CorsConstant.CORS_ALLOWED_HEADER)
                         .allowedMethods(HttpMethodEnum.GET.getCode(),
-                                HttpMethodEnum.POST.getCode(),
-                                HttpMethodEnum.PUT.getCode(),
-                                HttpMethodEnum.DELETE.getCode(),
-                                HttpMethodEnum.HEAD.getCode(),
-                                HttpMethodEnum.OPTIONS.getCode())
-                        *//** true: ajax请求需添加 xhrFields: {withCredentials: true} *//*
+                                        HttpMethodEnum.POST.getCode(),
+                                        HttpMethodEnum.PUT.getCode(),
+                                        HttpMethodEnum.DELETE.getCode(),
+                                        HttpMethodEnum.HEAD.getCode(),
+                                        HttpMethodEnum.OPTIONS.getCode())
+                        /** true: ajax请求需添加 xhrFields: {withCredentials: true} */
                         .allowCredentials(false)
                         .exposedHeaders(HttpHeaders.SET_COOKIE).maxAge(CorsConstant.CORS_MAX_AGE)
                         .maxAge(CorsConstant.CORS_MAX_AGE);
             }
         };
     }
-}*/
+}
 
 
 /** 方法三: 能请求，返回有数据
@@ -88,12 +88,18 @@ public class Blog2MvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedHeaders("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
-                .allowCredentials(true)
-                .exposedHeaders(HttpHeaders.SET_COOKIE).maxAge(3600L)
+        registry.addMapping(CorsConstant.CORS_MAPPING_PATH)
+                .allowedOrigins(CorsConstant.CORS_ALLOWED_ORIGIN)
+                .allowedHeaders(CorsConstant.CORS_ALLOWED_HEADER)
+                .allowedMethods(HttpMethodEnum.GET.getCode(),
+                                HttpMethodEnum.POST.getCode(),
+                                HttpMethodEnum.PUT.getCode(),
+                                HttpMethodEnum.DELETE.getCode(),
+                                HttpMethodEnum.HEAD.getCode(),
+                                HttpMethodEnum.OPTIONS.getCode())
+                *//** true: ajax请求需添加 xhrFields: {withCredentials: true} *//*
+                .allowCredentials(false)
+                .exposedHeaders(HttpHeaders.SET_COOKIE).maxAge(CorsConstant.CORS_MAX_AGE)
                 .maxAge(3600L);
     }
 }*/
