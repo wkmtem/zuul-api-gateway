@@ -13,6 +13,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import java.util.Arrays;
+
 /**
  * Class Name: CorsConfig
  * Package: com.nsntc.zuul.config.cors
@@ -21,21 +23,24 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * Create DateTime: 2018/1/12 下午3:49
  * Version: 1.0
  */
-/*@SpringBootConfiguration
+@SpringBootConfiguration
 public class CorsConfig {
 
     private CorsConfiguration buildConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        *//** 可自行筛选 *//*
+        /** 可自行筛选 */
         corsConfiguration.addAllowedOrigin(CorsConstant.CORS_ALLOWED_ORIGIN);
         corsConfiguration.addAllowedHeader(CorsConstant.CORS_ALLOWED_HEADER);
-        corsConfiguration.addAllowedMethod(HttpMethodEnum.GET.getCode());
-        corsConfiguration.addAllowedMethod(HttpMethodEnum.POST.getCode());
-        corsConfiguration.addAllowedMethod(HttpMethodEnum.PUT.getCode());
-        corsConfiguration.addAllowedMethod(HttpMethodEnum.DELETE.getCode());
-        corsConfiguration.addAllowedMethod(HttpMethodEnum.HEAD.getCode());
-        corsConfiguration.addAllowedMethod(HttpMethodEnum.OPTIONS.getCode());
+        corsConfiguration.setAllowedMethods(Arrays.asList(CorsConstant.CORS_ALLOWED_METHODS));
+        /**
+         * 允许携带证书(cookie), 要求cookie的域必须是两个子域的顶级域
+         * ajax 添加语句
+         * crossDomain: true,
+         * xhrFields: { withCredentials: true }
+         */
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setMaxAge(CorsConstant.CORS_MAX_AGE);
 
         return corsConfiguration;
     }
@@ -46,13 +51,13 @@ public class CorsConfig {
         source.registerCorsConfiguration(CorsConstant.CORS_MAPPING_PATH, buildConfig());
         return new CorsFilter(source);
     }
-}*/
+}
 
 /** 方法二: 能请求，返回有数据
  *  提示 No 'Access-Control-Allow-Origin’ header is present on the requested resource.
  *      Origin 'http://localhost:63342' is therefore not allowed.
  */
-@SpringBootConfiguration
+/*@SpringBootConfiguration
 public class CorsConfig {
 
     @Bean
@@ -63,43 +68,46 @@ public class CorsConfig {
                 registry.addMapping(CorsConstant.CORS_MAPPING_PATH)
                         .allowedOrigins(CorsConstant.CORS_ALLOWED_ORIGIN)
                         .allowedHeaders(CorsConstant.CORS_ALLOWED_HEADER)
-                        .allowedMethods(HttpMethodEnum.GET.getCode(),
-                                        HttpMethodEnum.POST.getCode(),
-                                        HttpMethodEnum.PUT.getCode(),
-                                        HttpMethodEnum.DELETE.getCode(),
-                                        HttpMethodEnum.HEAD.getCode(),
-                                        HttpMethodEnum.OPTIONS.getCode())
-                        /** true: ajax请求需添加 xhrFields: {withCredentials: true} */
+                        .allowedMethods(CorsConstant.CORS_ALLOWED_METHODS)
+                        *//**
+                         * 允许携带证书(cookie), 要求cookie的域必须是两个子域的顶级域
+                         * ajax 添加语句
+                         * crossDomain: true,
+                         * xhrFields: { withCredentials: true }
+                         *//*
                         .allowCredentials(false)
                         .exposedHeaders(HttpHeaders.SET_COOKIE).maxAge(CorsConstant.CORS_MAX_AGE)
                         .maxAge(CorsConstant.CORS_MAX_AGE);
             }
         };
     }
-}
+}*/
 
 
 /** 方法三: 能请求，返回有数据
  *  提示 No 'Access-Control-Allow-Origin’ header is present on the requested resource.
  *      Origin 'http://localhost:63342' is therefore not allowed.
  */
-/*@SpringBootConfiguration
-public class Blog2MvcConfig extends WebMvcConfigurerAdapter {
+/*
+@SpringBootConfiguration
+public class CorsConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping(CorsConstant.CORS_MAPPING_PATH)
                 .allowedOrigins(CorsConstant.CORS_ALLOWED_ORIGIN)
                 .allowedHeaders(CorsConstant.CORS_ALLOWED_HEADER)
-                .allowedMethods(HttpMethodEnum.GET.getCode(),
-                                HttpMethodEnum.POST.getCode(),
-                                HttpMethodEnum.PUT.getCode(),
-                                HttpMethodEnum.DELETE.getCode(),
-                                HttpMethodEnum.HEAD.getCode(),
-                                HttpMethodEnum.OPTIONS.getCode())
-                *//** true: ajax请求需添加 xhrFields: {withCredentials: true} *//*
+                .allowedMethods(CorsConstant.CORS_ALLOWED_METHODS);
+                */
+/**
+                 * 允许携带证书(cookie), 要求cookie的域必须是两个子域的顶级域
+                 * ajax 添加语句
+                 * crossDomain: true,
+                 * xhrFields: { withCredentials: true }
+                 *//*
+
                 .allowCredentials(false)
                 .exposedHeaders(HttpHeaders.SET_COOKIE).maxAge(CorsConstant.CORS_MAX_AGE)
-                .maxAge(3600L);
+                .maxAge(CorsConstant.CORS_MAX_AGE);
     }
 }*/
