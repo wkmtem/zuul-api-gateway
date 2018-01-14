@@ -4,7 +4,7 @@ eureka:
       # ubuntu
       #defaultZone: ${eurekaServerUrl:http://administrator:omega@192.168.0.201:7777/eureka/}
       # 139.196.195.162
-      defaultZone: ${eurekaServerUrl:http://administrator:omega@10.46.31.101:7777/eureka/}
+      defaultZone: ${eurekaServerUrl:http://administrator:omega@172.19.245.110:7777/eureka/}
       # localhost
       #defaultZone: ${eurekaServerUrl:http://administrator:omega@127.0.0.1:7777/eureka/}
 
@@ -21,7 +21,7 @@ spring:
       #label: master
 
   rabbitmq:
-    host: ${rabbitmqHost:139.196.195.162}
+    host: ${rabbitmqHost:interview.nsntc.com}
     port: ${rabbitmqPort:5672}
-    username: ${rabbitmqUsername:admin}
+    username: ${rabbitmqUsername:administrator}
     password: ${rabbitmqPassword:omega}
