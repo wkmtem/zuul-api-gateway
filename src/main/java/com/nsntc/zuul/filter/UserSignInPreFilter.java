@@ -3,9 +3,12 @@ package com.nsntc.zuul.filter;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.nsntc.commons.bean.Result;
+import com.nsntc.commons.constant.SystemConstant;
 import com.nsntc.commons.enums.ZuulFilterTypeEnum;
 import com.nsntc.commons.exception.ApplicationException;
+import com.nsntc.commons.utils.JsonUtil;
 import com.nsntc.commons.utils.RequestUtil;
+import com.nsntc.interview.commons.bean.RedisUser;
 import com.nsntc.interview.commons.constant.CookieConstant;
 import com.nsntc.interview.commons.enums.ResultEnum;
 import com.nsntc.zuul.config.yml.GlobalYml;
@@ -133,6 +136,7 @@ public class UserSignInPreFilter extends ZuulFilter {
         if (null == result.getData()) {
             throw new ApplicationException(ResultEnum.USER_ACCOUNT_NOT_LOGIN);
         }
+        requestContext.set(SystemConstant.CURRENT_USER, JsonUtil.jsonToObjectList((String) result.getData(), RedisUser.class));
         /** 放行请求, 对其进行路由 */
         requestContext.setSendZuulResponse(true);
     }
