@@ -45,7 +45,7 @@ zuul:
       serviceId: interview-system
 
     # api server name
-    interview-system:
+    interview-qbc:
       # 转发所有header(单路由)
       sensitive-headers: '*'
       path: /qbc/**

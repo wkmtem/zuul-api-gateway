@@ -45,12 +45,12 @@ zuul:
       serviceId: interview-system
 
     # api server name
-      interview-system:
-        # 转发所有header(单路由)
-        sensitive-headers: '*'
-        path: /qbc/**
-        strip-prefix: false
-        serviceId: interview-qbc
+    interview-qbc:
+      # 转发所有header(单路由)
+      sensitive-headers: '*'
+      path: /qbc/**
+      strip-prefix: false
+      serviceId: interview-qbc
 
 swagger:
   # zuul gateway swagger
