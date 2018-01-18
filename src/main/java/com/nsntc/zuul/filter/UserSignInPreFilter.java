@@ -122,6 +122,7 @@ public class UserSignInPreFilter extends ZuulFilter {
 
         RequestContext requestContext = RequestContext.getCurrentContext();
         String cookieValue = RequestUtil.getCookieValue(CookieConstant.COOKIE_KEY);
+        System.out.println(">>>>>>>>>>>>>>>> token是：" + cookieValue);
         /** cookie不存在 */
         if (StringUtils.isEmpty(cookieValue)) {
             throw new ApplicationException(ResultEnum.COOKIE_NOT_EXIST);
@@ -131,12 +132,13 @@ public class UserSignInPreFilter extends ZuulFilter {
         if (!ResultEnum.OK.getCode().equals(result.getCode())) {
             throw new ApplicationException(result.getCode(), result.getMsg());
         }
-
+        System.out.println(">>>>>>>> sso请求：" + result.getMsg());
+        System.out.println(">>>>>>>> json: " + result.getData());
         /** 未登录 */
         if (null == result.getData()) {
             throw new ApplicationException(ResultEnum.USER_ACCOUNT_NOT_LOGIN);
         }
-        requestContext.set(SystemConstant.CURRENT_USER, JsonUtil.jsonToObjectList((String) result.getData(), RedisUser.class));
+        requestContext.set(SystemConstant.CURRENT_USER, JsonUtil.jsonToObject((String) result.getData(), RedisUser.class));
         /** 放行请求, 对其进行路由 */
         requestContext.setSendZuulResponse(true);
     }
