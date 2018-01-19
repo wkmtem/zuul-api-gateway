@@ -2,7 +2,7 @@ package com.nsntc.zuul.filter;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.nsntc.commons.constant.SystemConstant;
+import com.nsntc.commons.constant.PartyTopConstant;
 import com.nsntc.commons.enums.ZuulFilterTypeEnum;
 import com.nsntc.interview.commons.bean.RedisUser;
 import com.nsntc.zuul.constant.ZuulConstant;
@@ -39,7 +39,7 @@ public class AuthenticationPreFilter extends ZuulFilter {
     public Object run() {
 
         RequestContext requestContext = RequestContext.getCurrentContext();
-        RedisUser redisUser = (RedisUser) requestContext.get(SystemConstant.CURRENT_USER);
+        RedisUser redisUser = (RedisUser) requestContext.get(PartyTopConstant.CURRENT_USER);
 
         /** 放行请求, 对其进行路由 */
         requestContext.setSendZuulResponse(true);

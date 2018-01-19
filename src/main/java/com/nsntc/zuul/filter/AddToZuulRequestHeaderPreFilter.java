@@ -2,7 +2,7 @@ package com.nsntc.zuul.filter;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.nsntc.commons.constant.SystemConstant;
+import com.nsntc.commons.constant.PartyTopConstant;
 import com.nsntc.commons.enums.ZuulFilterTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -56,6 +56,6 @@ public class AddToZuulRequestHeaderPreFilter extends ZuulFilter {
 
         /** Pass remote address downstream by setting X-Forwarded for header again on Zuul request */
         log.info("[Remote Addr] >>> {{}}", remoteAddr);
-        requestContext.getZuulRequestHeaders().put(SystemConstant.ZUUL_REMOTE_ADDR, remoteAddr);
+        requestContext.getZuulRequestHeaders().put(PartyTopConstant.ZUUL_REMOTE_ADDR, remoteAddr);
     }
 }

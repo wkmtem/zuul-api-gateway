@@ -2,7 +2,7 @@ package com.nsntc.zuul.filter;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.nsntc.commons.constant.SystemConstant;
+import com.nsntc.commons.constant.PartyTopConstant;
 import com.nsntc.commons.enums.ZuulFilterTypeEnum;
 import com.nsntc.commons.exception.ApplicationException;
 import com.nsntc.commons.utils.GsonUtil;
@@ -60,7 +60,7 @@ public class ErrorZuulFilter extends ZuulFilter {
         try {
             RequestContext requestContext = RequestContext.getCurrentContext();
             /** 响应json编码 */
-            requestContext.getResponse().setContentType(SystemConstant.RESPONSE_CONTENTTYPE_JSON);
+            requestContext.getResponse().setContentType(PartyTopConstant.RESPONSE_CONTENTTYPE_JSON);
             /** Http响应码 */
             requestContext.setResponseStatusCode(HttpServletResponse.SC_OK);
 

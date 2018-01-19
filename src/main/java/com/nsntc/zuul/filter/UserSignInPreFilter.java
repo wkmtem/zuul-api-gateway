@@ -3,7 +3,7 @@ package com.nsntc.zuul.filter;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.nsntc.commons.bean.Result;
-import com.nsntc.commons.constant.SystemConstant;
+import com.nsntc.commons.constant.PartyTopConstant;
 import com.nsntc.commons.enums.ZuulFilterTypeEnum;
 import com.nsntc.commons.exception.ApplicationException;
 import com.nsntc.commons.utils.JsonUtil;
@@ -135,7 +135,7 @@ public class UserSignInPreFilter extends ZuulFilter {
         if (null == result.getData()) {
             throw new ApplicationException(ResultEnum.USER_ACCOUNT_NOT_LOGIN);
         }
-        requestContext.set(SystemConstant.CURRENT_USER, JsonUtil.jsonToObject((String) result.getData(), RedisUser.class));
+        requestContext.set(PartyTopConstant.CURRENT_USER, JsonUtil.jsonToObject((String) result.getData(), RedisUser.class));
         /** 放行请求, 对其进行路由 */
         requestContext.setSendZuulResponse(true);
     }
