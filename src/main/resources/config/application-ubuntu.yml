@@ -36,17 +36,13 @@ zuul:
       # 面向服务策略, 指定Eureka注册中心服务id
       serviceId: interview-sso
 
-    # api server name
     interview-system:
-      # 转发所有header(单路由)
       sensitive-headers: '*'
       path: /sys/**
       strip-prefix: false
       serviceId: interview-system
 
-    # api server name
     interview-qbc:
-      # 转发所有header(单路由)
       sensitive-headers: '*'
       path: /qbc/**
       strip-prefix: false
