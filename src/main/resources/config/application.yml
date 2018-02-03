@@ -5,8 +5,22 @@ spring:
   #profiles:
     #active: dev
 
-#zuul:
+zuul:
   # 转发所有header(全局路由)
   #sensitive-headers: '*'
+
+  # 默认配置，请求很容易超时com.netflix.zuul.exception.zuulexception timeout
+  host:
+    connect-timeout-millis: 10000
+    socket-timeout-millis: 60000
+
+# 默认配置，请求很容易超时com.netflix.zuul.exception.zuulexception timeout
+hystrix:
+  command:
+     default:
+       execution:
+         isolation:
+           thread:
+             timeoutInMilliseconds: 60000
 
 
