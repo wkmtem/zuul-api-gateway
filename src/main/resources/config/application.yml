@@ -9,13 +9,12 @@ zuul:
   # 转发所有header(全局路由)
   #sensitive-headers: '*'
 
-  # 默认配置，请求很容易超时com.netflix.zuul.exception.zuulexception timeout
+  # 默认配置时，请求很容易超时com.netflix.zuul.exception.zuulexception timeout
   host:
     connect-timeout-millis: 60000
     socket-timeout-millis: 60000
 
-# 默认配置，请求很容易超时com.netflix.zuul.exception.zuulexception timeout
-##timeout config
+# 断路器的超时时间需要大于ribbon的超时时间, 否则不会触发重试
 hystrix:
   command:
     default:
@@ -25,8 +24,14 @@ hystrix:
             timeoutInMilliseconds: 60000
 
 ribbon:
-  ReadTimeout: 60000
-  ConnectTimeout: 60000
-#  MaxAutoRetries: 0
-#  MaxAutoRetriesNextServer: 1
+  # 请求处理的超时时间
+  ReadTimeout: 10000
+  # 请求连接的超时时间
+  ConnectTimeout: 10000
+  # 对所有操作请求都进行重试
+  OkToRetryOnAllOperations: true
+  # 当前实例的重试次数
+  MaxAutoRetries: 3
+  # 切换实例的重试次数
+  MaxAutoRetriesNextServer: 3
 
