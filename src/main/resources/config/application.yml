@@ -11,16 +11,22 @@ zuul:
 
   # 默认配置，请求很容易超时com.netflix.zuul.exception.zuulexception timeout
   host:
-    connect-timeout-millis: 10000
+    connect-timeout-millis: 60000
     socket-timeout-millis: 60000
 
 # 默认配置，请求很容易超时com.netflix.zuul.exception.zuulexception timeout
+##timeout config
 hystrix:
   command:
-     default:
-       execution:
-         isolation:
-           thread:
-             timeoutInMilliseconds: 60000
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
 
+ribbon:
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
+#  MaxAutoRetries: 0
+#  MaxAutoRetriesNextServer: 1
 
