@@ -67,7 +67,7 @@ public class ErrorZuulFilter extends ZuulFilter {
             Throwable exception = requestContext.getThrowable().getCause();
             if (exception instanceof ApplicationException) {
                 ApplicationException e = (ApplicationException) exception;
-                log.error("[Zuul异常过滤器] >>> {{}}, [错误信息] >>> {{}}", e.getCode(), e.getMessage());
+                log.info("[Zuul异常过滤器] >>> {{}}, [错误信息] >>> {{}}", e.getCode(), e.getMessage());
                 responseBody = GsonUtil.toJson(ResultUtil.error(e.getCode(), e.getMessage()));
                 requestContext.setResponseBody(responseBody);
             }

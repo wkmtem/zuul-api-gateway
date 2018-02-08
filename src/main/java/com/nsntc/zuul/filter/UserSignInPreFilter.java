@@ -14,6 +14,7 @@ import com.nsntc.interview.commons.enums.ResultEnum;
 import com.nsntc.zuul.config.yml.GlobalYml;
 import com.nsntc.zuul.constant.ZuulConstant;
 import com.nsntc.zuul.micro.consumer.sso.SsoApiService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Component;
  * Create DateTime: 2017/12/16 上午8:02
  * Version: 1.0
  */
+@Slf4j
 @Component
 public class UserSignInPreFilter extends ZuulFilter {
 
@@ -124,15 +126,18 @@ public class UserSignInPreFilter extends ZuulFilter {
         String cookieValue = RequestUtil.getCookieValue(CookieConstant.COOKIE_KEY);
         /** cookie不存在 */
         if (StringUtils.isEmpty(cookieValue)) {
+            log.info("[Zuul登录过滤器] >>> [COOKIE不存在]");
             throw new ApplicationException(ResultEnum.COOKIE_NOT_EXIST);
         }
         /** sso微服务 */
         Result result = this.ssoApiService.getUserByToken(cookieValue);
         if (!ResultEnum.OK.getCode().equals(result.getCode())) {
+            log.error("[Zuul登录过滤器] >>> {{}}, [错误信息] >>> {{}}", result.getCode(), result.getMsg());
             throw new ApplicationException(result.getCode(), result.getMsg());
         }
         /** 未登录 */
         if (null == result.getData()) {
+            log.info("[Zuul登录过滤器] >>> [用户未登录]");
             throw new ApplicationException(ResultEnum.USER_ACCOUNT_NOT_LOGIN);
         }
         requestContext.set(PartyTopConstant.CURRENT_USER, JsonUtil.jsonToObject((String) result.getData(), RedisUser.class));
