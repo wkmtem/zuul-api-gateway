@@ -50,7 +50,7 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
      * @return
      */
     @Bean
-    UiConfiguration uiConfig() {
+    public UiConfiguration uiConfig() {
         return new UiConfiguration(SwaggerConstant.UI_CFG_VALIDATOR_URL,
                                    SwaggerConstant.UI_CFG_DOC_EXPANSION,
                                    SwaggerConstant.UI_CFG_APIS_SORTER,

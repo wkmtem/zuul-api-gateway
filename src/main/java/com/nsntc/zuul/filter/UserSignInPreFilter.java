@@ -102,7 +102,7 @@ public class UserSignInPreFilter extends ZuulFilter {
         String uri = requestContext.getRequest().getRequestURI().toString();
         if (StringUtils.isNotEmpty(this.globalYml.getWhitelistPrefix())) {
             String[] filterIgnorePrefixs = StringUtils.split(this.globalYml.getWhitelistPrefix(), ',');
-            /** 非/sso/开头, 过滤 */
+            /** 白名单过滤 */
             for (String filterIgnorePrefix : filterIgnorePrefixs) {
                 if (StringUtils.startsWithIgnoreCase(uri, StringUtils.trim(filterIgnorePrefix))) {
                     flag = false;
