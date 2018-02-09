@@ -8,7 +8,7 @@ import com.nsntc.commons.enums.ZuulFilterTypeEnum;
 import com.nsntc.commons.exception.ApplicationException;
 import com.nsntc.commons.utils.JsonUtil;
 import com.nsntc.commons.utils.RequestUtil;
-import com.nsntc.interview.commons.bean.RedisUser;
+import com.nsntc.interview.commons.bean.CacheUser;
 import com.nsntc.interview.commons.constant.CookieConstant;
 import com.nsntc.interview.commons.enums.ResultEnum;
 import com.nsntc.zuul.config.yml.GlobalYml;
@@ -140,7 +140,7 @@ public class UserSignInPreFilter extends ZuulFilter {
             log.info("[Zuul登录过滤器] >>> [用户未登录]");
             throw new ApplicationException(ResultEnum.USER_ACCOUNT_NOT_LOGIN);
         }
-        requestContext.set(PartyTopConstant.CURRENT_USER, JsonUtil.jsonToObject((String) result.getData(), RedisUser.class));
+        requestContext.set(PartyTopConstant.CURRENT_USER, JsonUtil.jsonToObject((String) result.getData(), CacheUser.class));
         /** 放行请求, 对其进行路由 */
         requestContext.setSendZuulResponse(true);
     }
