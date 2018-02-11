@@ -18,6 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Class Name: UserSignInPreFilter
@@ -36,6 +41,9 @@ public class UserSignInPreFilter extends ZuulFilter {
     @Autowired
     private SsoApiService ssoApiService;
 
+    private List<String> whitelist;
+    private PathMatcher pathMatcher;
+
     /**
      * Method Name: shouldFilter
      * Description: 判断该过滤器是否需要执行: true: 执行, false: 不执行
@@ -47,12 +55,11 @@ public class UserSignInPreFilter extends ZuulFilter {
 
         RequestContext requestContext = RequestContext.getCurrentContext();
         if (globalYml.getSwitchVal()) {
-            return this.ignoreURI(requestContext);
+            return this.ignoreWhitelistURI(requestContext);
         }
         /** 向下传递"是否过滤" */
         requestContext.set(ZuulConstant.NEXT_FILTER, false);
         return false;
-
     }
 
     /**
@@ -90,29 +97,44 @@ public class UserSignInPreFilter extends ZuulFilter {
     }
 
     /**
-     * Method Name: ignoreURI
-     * Description: 是否忽略URI过滤
+     * Method Name: ignoreWhitelistURI
+     * Description: 是否忽略白名单URI
      * Create DateTime: 2017/12/30 下午5:54
      * @param requestContext
      * @return
      */
-    private boolean ignoreURI(RequestContext requestContext) {
+    private boolean ignoreWhitelistURI(RequestContext requestContext) {
 
         boolean flag = true;
         String uri = requestContext.getRequest().getRequestURI().toString();
-        if (StringUtils.isNotEmpty(this.globalYml.getWhitelistPrefix())) {
-            String[] filterIgnorePrefixs = StringUtils.split(this.globalYml.getWhitelistPrefix(), ',');
-            /** 白名单过滤 */
-            for (String filterIgnorePrefix : filterIgnorePrefixs) {
-                if (StringUtils.startsWithIgnoreCase(uri, StringUtils.trim(filterIgnorePrefix))) {
-                    flag = false;
-                    break;
-                }
+        if (StringUtils.isNotEmpty(this.globalYml.getWhitelist())) {
+            String[] excludes = StringUtils.split(this.globalYml.getWhitelist(), ',');
+            for (int i = 0, len = excludes.length; i < len; i++) {
+                excludes[i] = StringUtils.trim(excludes[i]);
             }
+            whitelist = Arrays.asList(excludes);
+            pathMatcher = new AntPathMatcher();
+            flag = !this.matchWhitelistPath(uri);
         }
         /** 向下传递"是否过滤" */
         requestContext.set(ZuulConstant.NEXT_FILTER, flag);
         return flag;
+    }
+
+    /**
+     * Method Name: matchWhitelistPath
+     * Description: 校验白名单
+     * Create DateTime: 2018/2/11 下午9:20
+     * @param uri
+     * @return
+     */
+    private boolean matchWhitelistPath(String uri) {
+        for (String ignore : whitelist) {
+            if (this.pathMatcher.match(ignore, uri)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

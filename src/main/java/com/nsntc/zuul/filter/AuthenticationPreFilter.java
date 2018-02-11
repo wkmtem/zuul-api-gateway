@@ -10,8 +10,10 @@ import com.nsntc.interview.commons.enums.ResultEnum;
 import com.nsntc.zuul.constant.ZuulConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.PathMatcher;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Class Name: AuthenticationPreFilter

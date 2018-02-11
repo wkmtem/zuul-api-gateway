@@ -27,7 +27,7 @@ public class GlobalYml {
     private Boolean switchVal = true;
 
     /**
-     * 忽略过滤地址前缀
+     * 白名单
      */
-    private String whitelistPrefix;
+    private String whitelist;
 }
