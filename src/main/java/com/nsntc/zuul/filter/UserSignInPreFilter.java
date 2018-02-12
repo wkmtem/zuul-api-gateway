@@ -13,16 +13,15 @@ import com.nsntc.interview.commons.constant.CookieConstant;
 import com.nsntc.interview.commons.enums.ResultEnum;
 import com.nsntc.zuul.config.yml.GlobalYml;
 import com.nsntc.zuul.constant.ZuulConstant;
+import com.nsntc.zuul.container.WhitelistContainer;
 import com.nsntc.zuul.micro.consumer.sso.SsoApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.PathMatcher;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Class Name: UserSignInPreFilter
@@ -40,8 +39,9 @@ public class UserSignInPreFilter extends ZuulFilter {
     private GlobalYml globalYml;
     @Autowired
     private SsoApiService ssoApiService;
+    @Autowired
+    private WhitelistContainer whitelistContainer;
 
-    private List<String> whitelist;
     private PathMatcher pathMatcher;
 
     /**
@@ -54,7 +54,7 @@ public class UserSignInPreFilter extends ZuulFilter {
     public boolean shouldFilter() {
 
         RequestContext requestContext = RequestContext.getCurrentContext();
-        if (globalYml.getSwitchVal()) {
+        if (this.globalYml.getSwitchVal()) {
             return this.ignoreWhitelistURI(requestContext);
         }
         /** 向下传递"是否过滤" */
@@ -106,14 +106,10 @@ public class UserSignInPreFilter extends ZuulFilter {
     private boolean ignoreWhitelistURI(RequestContext requestContext) {
 
         boolean flag = true;
+        this.whitelistContainer.initWhitelist();
         String uri = requestContext.getRequest().getRequestURI().toString();
-        if (StringUtils.isNotEmpty(this.globalYml.getWhitelist())) {
-            String[] excludes = StringUtils.split(this.globalYml.getWhitelist(), ',');
-            for (int i = 0, len = excludes.length; i < len; i++) {
-                excludes[i] = StringUtils.trim(excludes[i]);
-            }
-            whitelist = Arrays.asList(excludes);
-            pathMatcher = new AntPathMatcher();
+        if (!CollectionUtils.isEmpty(WhitelistContainer.getWhitelist())) {
+            this.pathMatcher = new AntPathMatcher();
             flag = !this.matchWhitelistPath(uri);
         }
         /** 向下传递"是否过滤" */
@@ -129,8 +125,8 @@ public class UserSignInPreFilter extends ZuulFilter {
      * @return
      */
     private boolean matchWhitelistPath(String uri) {
-        for (String ignore : whitelist) {
-            if (this.pathMatcher.match(ignore, uri)) {
+        for (String white : WhitelistContainer.getWhitelist()) {
+            if (this.pathMatcher.match(white, uri)) {
                 return true;
             }
         }
