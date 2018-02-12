@@ -36,17 +36,29 @@ zuul:
       # 面向服务策略, 指定Eureka注册中心服务id
       serviceId: interview-sso
 
+    # api server name
     interview-system:
+      # 转发所有header(单路由)
       sensitive-headers: '*'
       path: /sys/**
       strip-prefix: false
       serviceId: interview-system
 
+    # api server name
     interview-qbc:
+      # 转发所有header(单路由)
       sensitive-headers: '*'
       path: /qbc/**
       strip-prefix: false
       serviceId: interview-qbc
+
+    # api server name
+    interview-exam:
+      # 转发所有header(单路由)
+      sensitive-headers: '*'
+      path: /exam/**
+      strip-prefix: false
+      serviceId: interview-exam
 
 swagger:
   # zuul gateway swagger
@@ -55,15 +67,15 @@ swagger:
   apiVersion: 1.0
   baseUrl: http://interview.nsntc.com:80
   createdBy: wkm
-  license: www.nsntc.com
+  license: interview.nsntc.com
 
   # 微服务 swagger api
-  resource[names]: 注册登录系统, 菜单权限系统, 题库中心
-  resource[locations]: /sso/v2/api-docs, /sys/v2/api-docs, /qbc/v2/api-docs
-  resource[versions]: 1.0, 1.0, 1.0
+  resource[names]: 注册登录系统, 菜单权限系统, 题库中心, 考试系统
+  resource[locations]: /sso/v2/api-docs, /sys/v2/api-docs, /qbc/v2/api-docs, /exam/v2/api-docs
+  resource[versions]: 1.0, 1.0, 1.0, 1.0
 
 global:
   # 全局开关
   switchVal: true
-  # 白名单地址前缀
-  whitelistPrefix: /sso/, /sys/v2/api-docs, /qbc/v2/api-docs
+  # 白名单
+  whitelist: /sso/**, /exam/**, /sys/v2/**, /qbc/v2/**, /sys/self/**, /sys/user/check, /sys/role/selector, /qbc/oss/signature, /qbc/sheet/item/list/type, /qbc/info/selector, /qbc/question/bank/selector
