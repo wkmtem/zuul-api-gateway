@@ -32,7 +32,6 @@ public class ApplicationStartup implements ApplicationListener<ContextRefreshedE
          * org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext
          * */
         if (event.getApplicationContext() instanceof AnnotationConfigEmbeddedWebApplicationContext) {
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>");
             /** 初始化菜单权限 */
             //MenuPermissionUtils.initMenuPermission();
         }

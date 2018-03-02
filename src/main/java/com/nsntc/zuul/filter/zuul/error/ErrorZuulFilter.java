@@ -1,4 +1,4 @@
-package com.nsntc.zuul.filter;
+package com.nsntc.zuul.filter.zuul.error;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;

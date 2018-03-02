@@ -1,4 +1,4 @@
-package com.nsntc.zuul.filter;
+package com.nsntc.zuul.filter.zuul.pre;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
@@ -44,7 +44,7 @@ public class AuthenticationPreFilter extends ZuulFilter {
 
     @Override
     public int filterOrder() {
-        return 2;
+        return 3;
     }
 
     @Override
