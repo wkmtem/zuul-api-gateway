@@ -19,16 +19,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * Class Name: UserSignInPreFilter
+ * Class Name: UserTokenPreFilter
  * Package: com.nsntc.zuul.filter
- * Description: 用户登录前置过滤器
+ * Description: 用户token前置过滤器
  * @author wkm
  * Create DateTime: 2017/12/16 上午8:02
  * Version: 1.0
  */
 @Slf4j
 @Component
-public class UserSignInPreFilter extends ZuulFilter {
+public class UserTokenPreFilter extends ZuulFilter {
 
     @Autowired
     private SsoApiService ssoApiService;
