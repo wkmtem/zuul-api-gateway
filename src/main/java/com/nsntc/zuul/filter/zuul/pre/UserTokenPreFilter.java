@@ -3,11 +3,13 @@ package com.nsntc.zuul.filter.zuul.pre;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.nsntc.commons.bean.Result;
+import com.nsntc.commons.bean.SessionUser;
 import com.nsntc.commons.constant.PartyTopConstant;
 import com.nsntc.commons.enums.ZuulFilterTypeEnum;
 import com.nsntc.commons.exception.ApplicationException;
 import com.nsntc.commons.utils.JsonUtil;
 import com.nsntc.commons.utils.RequestUtil;
+import com.nsntc.commons.utils.SessionUtil;
 import com.nsntc.interview.commons.bean.CacheUser;
 import com.nsntc.interview.commons.constant.CookieConstant;
 import com.nsntc.interview.commons.enums.ResultEnum;
@@ -17,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Class Name: UserTokenPreFilter
@@ -88,13 +92,35 @@ public class UserTokenPreFilter extends ZuulFilter {
 
         RequestContext requestContext = RequestContext.getCurrentContext();
         String cookieValue = RequestUtil.getCookieValue(CookieConstant.COOKIE_KEY);
+
+        System.out.println(">>>>>>>>> token: " + cookieValue);
+
         /** cookie不存在 */
         if (StringUtils.isEmpty(cookieValue)) {
             log.info("[Zuul登录过滤器] >>> [COOKIE不存在]");
             throw new ApplicationException(ResultEnum.COOKIE_NOT_EXIST);
         }
+
+        CacheUser cacheUser = this.getUserByToken(cookieValue);
+        requestContext.set(PartyTopConstant.CURRENT_USER, cacheUser);
+
+        /** 写入session */
+        this.setUserToSession(cookieValue, cacheUser.getUsername());
+
+        /** 放行请求, 对其进行路由 */
+        requestContext.setSendZuulResponse(true);
+    }
+
+    /**
+     * Method Name: getUserByToken
+     * Description: 根据token获取用户
+     * Create DateTime: 2018/3/5 下午5:21
+     * @param token
+     * @return
+     */
+    private CacheUser getUserByToken(String token) {
         /** sso微服务 */
-        Result result = this.ssoApiService.getUserByToken(cookieValue);
+        Result result = this.ssoApiService.getUserByToken(token);
         if (!ResultEnum.OK.getCode().equals(result.getCode())) {
             log.error("[Zuul登录过滤器] >>> {{}}, [错误信息] >>> {{}}", result.getCode(), result.getMsg());
             throw new ApplicationException(result.getCode(), result.getMsg());
@@ -104,8 +130,21 @@ public class UserTokenPreFilter extends ZuulFilter {
             log.info("[Zuul登录过滤器] >>> [用户未登录]");
             throw new ApplicationException(ResultEnum.USER_ACCOUNT_NOT_LOGIN);
         }
-        requestContext.set(PartyTopConstant.CURRENT_USER, JsonUtil.jsonToObject((String) result.getData(), CacheUser.class));
-        /** 放行请求, 对其进行路由 */
-        requestContext.setSendZuulResponse(true);
+        return JsonUtil.jsonToObject((String) result.getData(), CacheUser.class);
+    }
+
+    /**
+     * Method Name: setUserToSession
+     * Description: 设置用户到session中
+     * Create DateTime: 2018/3/5 下午3:58
+     * @return
+     */
+    private void setUserToSession(String token, String username) {
+        HttpServletRequest request = RequestUtil.getRequest();
+        SessionUser sessionUser = SessionUtil.getSessionUser(request);
+        if (null == sessionUser) {
+            sessionUser = new SessionUser(token, username);
+            SessionUtil.setSessionUser(request, sessionUser);
+        }
     }
 }

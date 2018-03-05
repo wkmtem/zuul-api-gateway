@@ -14,7 +14,7 @@ spring:
       discovery:
         enabled: true
         service-id: interview-config-server
-      name: zuul_gateway
+      name: zuul_gateway, session
       profile: ubuntu
       #profile: dev
       #profile: local
