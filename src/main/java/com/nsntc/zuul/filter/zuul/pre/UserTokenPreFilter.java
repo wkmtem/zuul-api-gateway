@@ -93,8 +93,6 @@ public class UserTokenPreFilter extends ZuulFilter {
         RequestContext requestContext = RequestContext.getCurrentContext();
         String cookieValue = RequestUtil.getCookieValue(CookieConstant.COOKIE_KEY);
 
-        System.out.println(">>>>>>>>> token: " + cookieValue);
-
         /** cookie不存在 */
         if (StringUtils.isEmpty(cookieValue)) {
             log.info("[Zuul登录过滤器] >>> [COOKIE不存在]");

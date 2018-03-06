@@ -8,7 +8,9 @@ import com.nsntc.commons.exception.ApplicationException;
 import com.nsntc.interview.commons.bean.CacheUser;
 import com.nsntc.interview.commons.enums.ResultEnum;
 import com.nsntc.zuul.constant.ZuulConstant;
+import com.nsntc.zuul.container.GeneralPermissionsContainer;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
@@ -27,6 +29,9 @@ import java.util.List;
 @Slf4j
 @Component
 public class AuthenticationPreFilter extends ZuulFilter {
+
+    @Autowired
+    private GeneralPermissionsContainer generalPermissionsContainer;
 
     private List<String> uriList;
     private PathMatcher pathMatcher;
@@ -54,17 +59,20 @@ public class AuthenticationPreFilter extends ZuulFilter {
 
         RequestContext requestContext = RequestContext.getCurrentContext();
         String uri = requestContext.getRequest().getRequestURI().toString();
-
-        CacheUser cacheUser = (CacheUser) requestContext.get(PartyTopConstant.CURRENT_USER);
-        String[] urls = cacheUser.getUrls();
-        if (null != urls) {
-            uriList = Arrays.asList(urls);
-            pathMatcher = new AntPathMatcher();
-            flag = this.matchPermissionUri(uri);
-        }
-        if (!flag) {
-            log.info("[Zuul鉴权过滤器] >>> [用户'{}' 无权访问'{}']", cacheUser.getUsername(), uri);
-            throw new ApplicationException(ResultEnum.UNAUTHORIZED_ACCESS);
+        /** 初始化通用权限 */
+        this.generalPermissionsContainer.initGeneralPermission();
+        if (!GeneralPermissionsContainer.getGeneralPermissionList().contains(uri)) {
+            CacheUser cacheUser = (CacheUser) requestContext.get(PartyTopConstant.CURRENT_USER);
+            String[] urls = cacheUser.getUrls();
+            if (null != urls) {
+                uriList = Arrays.asList(urls);
+                pathMatcher = new AntPathMatcher();
+                flag = this.matchPermissionUri(uri);
+            }
+            if (!flag) {
+                log.info("[Zuul鉴权过滤器] >>> [用户'{}' 无权访问'{}']", cacheUser.getUsername(), uri);
+                throw new ApplicationException(ResultEnum.UNAUTHORIZED_ACCESS);
+            }
         }
         /** 放行请求, 对其进行路由 */
         requestContext.setSendZuulResponse(true);

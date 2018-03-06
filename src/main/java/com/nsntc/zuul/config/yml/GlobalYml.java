@@ -30,4 +30,9 @@ public class GlobalYml {
      * 白名单
      */
     private String whitelist;
+
+    /**
+     * 通用权限
+     */
+    private String generalPermissions;
 }
