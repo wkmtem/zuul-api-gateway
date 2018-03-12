@@ -98,7 +98,7 @@ public class UserTokenPreFilter extends ZuulFilter {
             log.info("[Zuul登录过滤器] >>> [COOKIE不存在]");
             throw new ApplicationException(ResultEnum.COOKIE_NOT_EXIST);
         }
-
+        // todo 根据token查询用户
         CacheUser cacheUser = this.getUserByToken(cookieValue);
         requestContext.set(PartyTopConstant.CURRENT_USER, cacheUser);
 
