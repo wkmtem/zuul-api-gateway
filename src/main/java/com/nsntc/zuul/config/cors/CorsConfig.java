@@ -29,29 +29,31 @@ import java.util.Arrays;
 @SpringBootConfiguration
 public class CorsConfig {
 
-    @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration(CorsConstant.CORS_MAPPING_PATH, buildConfig());
-        return new CorsFilter(source);
-    }
-
     private CorsConfiguration buildConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        /** 可自行筛选 */
+        /** 1、设置访问源地址 */
         corsConfiguration.addAllowedOrigin(CorsConstant.CORS_ALLOWED_ORIGIN);
+        /** 2、设置访问源请求头 */
         corsConfiguration.addAllowedHeader(CorsConstant.CORS_ALLOWED_HEADER);
+        /** 3、设置访问源请求方法 */
         corsConfiguration.setAllowedMethods(Arrays.asList(CorsConstant.CORS_ALLOWED_METHODS));
-        /**
-         * 允许携带证书(cookie), 要求cookie的域必须是两个子域的顶级域
-         * ajax 添加语句
-         * crossDomain: true,
-         * xhrFields: { withCredentials: true }
+        /** 4、设置允许携带证书(cookie), 要求cookie的域必须是两个子域的顶级域
+         *  ajax 添加语句
+         *  crossDomain: true,
+         *  xhrFields: { withCredentials: true }
          */
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setMaxAge(CorsConstant.CORS_MAX_AGE);
 
         return corsConfiguration;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        /** 5、对接口配置跨域设置 */
+        source.registerCorsConfiguration(CorsConstant.CORS_MAPPING_PATH, buildConfig());
+        return new CorsFilter(source);
     }
 }
 
