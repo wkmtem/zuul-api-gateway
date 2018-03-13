@@ -17,9 +17,18 @@ import java.io.IOException;
  */
 public class CorsFilter implements Filter {
 
+    /** 是否开启本filter */
+    private boolean isOpen = true;
+
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
+        /** 不开启 */
+        if (!this.isOpen) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         String acrh = httpServletRequest.getHeader("Access-Control-Request-Headers");
@@ -30,7 +39,7 @@ public class CorsFilter implements Filter {
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
         httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
-        chain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
 
     @Override
