@@ -4,6 +4,7 @@ import com.nsntc.commons.constant.CorsConstant;
 import com.nsntc.commons.enums.HttpMethodEnum;
 import com.nsntc.commons.utils.RequestUtil;
 import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -48,14 +49,36 @@ public class CorsConfig {
         return corsConfiguration;
     }
 
+    /**
+     * Method Name: corsFilter
+     * Description: 返回带排序值的跨域过滤器
+     * Create DateTime: 2018/3/13 下午1:58
+     */
     @Bean
-    public CorsFilter corsFilter() {
+    public FilterRegistrationBean corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         /** 5、对接口配置跨域设置 */
         source.registerCorsConfiguration(CorsConstant.CORS_MAPPING_PATH, buildConfig());
-        return new CorsFilter(source);
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(new CorsFilter(source));
+        /** filter排序值 */
+        filterRegistrationBean.setOrder(0);
+        return filterRegistrationBean;
     }
+
+    /**
+     * Method Name: corsFilter
+     * Description: 返回跨域过滤器
+     * Create DateTime: 2018/3/13 下午1:57
+     */
+    /*@Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        *//** 5、对接口配置跨域设置 *//*
+        source.registerCorsConfiguration(CorsConstant.CORS_MAPPING_PATH, buildConfig());
+        return new CorsFilter(source);
+    }*/
 }
+
 
 /** 方法二: servlet过滤器方式, 实测有效 */
 /*@SpringBootConfiguration
