@@ -31,7 +31,8 @@ public class ApplicationStartup implements ApplicationListener<ContextRefreshedE
          * spring boot 默认情况下只有一个 WebApplicationContext
          * org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext
          * */
-        if (event.getApplicationContext() instanceof AnnotationConfigEmbeddedWebApplicationContext) {
+        //if (event.getApplicationContext() instanceof AnnotationConfigEmbeddedWebApplicationContext) {
+        if(null == event.getApplicationContext().getParent()) {
             /** 初始化菜单权限 */
             //MenuPermissionUtils.initMenuPermission();
         }
