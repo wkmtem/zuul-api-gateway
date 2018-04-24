@@ -5,7 +5,7 @@ import com.netflix.zuul.context.RequestContext;
 import com.nsntc.commons.bean.SessionPermission;
 import com.nsntc.commons.bean.SessionUser;
 import com.nsntc.commons.constant.PartyTopConstant;
-import com.nsntc.commons.enums.ZuulFilterTypeEnum;
+import com.nsntc.zuul.enums.ZuulFilterTypeEnum;
 import com.nsntc.commons.exception.ApplicationException;
 import com.nsntc.commons.utils.RequestUtil;
 import com.nsntc.commons.utils.SessionUtil;

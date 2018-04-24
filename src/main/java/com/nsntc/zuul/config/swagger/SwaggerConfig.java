@@ -1,7 +1,7 @@
-package com.nsntc.zuul.swagger;
+package com.nsntc.zuul.config.swagger;
 
-import com.nsntc.commons.constant.SwaggerConstant;
 import com.nsntc.zuul.config.yml.SwaggerYml;
+import com.nsntc.zuul.constant.SwaggerConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -69,11 +69,14 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(SwaggerConstant.RESOURCE_HTML_PATTERN)
-                .addResourceLocations(SwaggerConstant.RESOURCE_HTML_PATH);
+        /** spring boot */
+        registry.addResourceHandler(com.nsntc.commons.constant.SwaggerConstant.RESOURCE_STATIC_PATTERN)
+                .addResourceLocations(com.nsntc.commons.constant.SwaggerConstant.RESOURCE_STATIC_PATH);
 
-        registry.addResourceHandler(SwaggerConstant.RESOURCE_JARS_PATTERN)
-                .addResourceLocations(SwaggerConstant.RESOURCE_JARS_PATH);
+        registry.addResourceHandler(com.nsntc.commons.constant.SwaggerConstant.RESOURCE_HTML_PATTERN)
+                .addResourceLocations(com.nsntc.commons.constant.SwaggerConstant.RESOURCE_HTML_PATH);
+        registry.addResourceHandler(com.nsntc.commons.constant.SwaggerConstant.RESOURCE_JARS_PATTERN)
+                .addResourceLocations(com.nsntc.commons.constant.SwaggerConstant.RESOURCE_JARS_PATH);
         super.addResourceHandlers(registry);
     }
 

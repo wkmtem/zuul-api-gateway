@@ -1,4 +1,4 @@
-package com.nsntc.zuul.swagger;
+package com.nsntc.zuul.config.swagger;
 
 import com.nsntc.zuul.config.yml.SwaggerYml;
 import org.apache.commons.lang3.StringUtils;

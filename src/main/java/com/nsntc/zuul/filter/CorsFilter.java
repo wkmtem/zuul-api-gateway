@@ -1,3 +1,4 @@
+/*
 package com.nsntc.zuul.filter;
 
 import org.apache.commons.lang3.StringUtils;
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+*/
 /**
  * Class Name: CorsFilter
  * Package: com.nsntc.zuul.filter
@@ -14,16 +16,21 @@ import java.io.IOException;
  * @author wkm
  * Create DateTime: 2018/1/13 上午2:53
  * Version: 1.0
- */
+ *//*
+
 public class CorsFilter implements Filter {
 
-    /** 是否开启本filter */
+    */
+/** 是否开启本filter *//*
+
     private boolean isOpen = true;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-        /** 不开启 */
+        */
+/** 不开启 *//*
+
         if (!this.isOpen) {
             filterChain.doFilter(request, response);
             return;
@@ -48,3 +55,4 @@ public class CorsFilter implements Filter {
     @Override
     public void destroy() {}
 }
+*/

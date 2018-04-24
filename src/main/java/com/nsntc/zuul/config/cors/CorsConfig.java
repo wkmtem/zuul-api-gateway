@@ -1,6 +1,6 @@
 package com.nsntc.zuul.config.cors;
 
-import com.nsntc.commons.constant.CorsConstant;
+import com.nsntc.zuul.constant.CorsConstant;
 import com.nsntc.commons.enums.HttpMethodEnum;
 import com.nsntc.commons.utils.RequestUtil;
 import org.springframework.boot.SpringBootConfiguration;
@@ -33,9 +33,9 @@ public class CorsConfig {
     private CorsConfiguration buildConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         /** 1、设置访问源地址 */
-        corsConfiguration.addAllowedOrigin(CorsConstant.CORS_ALLOWED_ORIGIN);
+        corsConfiguration.addAllowedOrigin(CorsConstant.CORS_ALLOWED_STAR);
         /** 2、设置访问源请求头 */
-        corsConfiguration.addAllowedHeader(CorsConstant.CORS_ALLOWED_HEADER);
+        corsConfiguration.addAllowedHeader(CorsConstant.CORS_ALLOWED_STAR);
         /** 3、设置访问源请求方法 */
         corsConfiguration.setAllowedMethods(Arrays.asList(CorsConstant.CORS_ALLOWED_METHODS));
         /** 4、设置允许携带证书(cookie), 要求cookie的域必须是两个子域的顶级域

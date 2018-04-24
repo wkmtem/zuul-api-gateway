@@ -2,7 +2,7 @@ package com.nsntc.zuul.filter.zuul.pre;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.nsntc.commons.enums.ZuulFilterTypeEnum;
+import com.nsntc.zuul.enums.ZuulFilterTypeEnum;
 import com.nsntc.zuul.config.yml.GlobalYml;
 import com.nsntc.zuul.constant.ZuulConstant;
 import com.nsntc.zuul.container.WhitelistContainer;

@@ -3,7 +3,7 @@ package com.nsntc.zuul.filter.zuul.error;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.nsntc.commons.constant.PartyTopConstant;
-import com.nsntc.commons.enums.ZuulFilterTypeEnum;
+import com.nsntc.zuul.enums.ZuulFilterTypeEnum;
 import com.nsntc.commons.exception.ApplicationException;
 import com.nsntc.commons.utils.GsonUtil;
 import com.nsntc.interview.commons.enums.ResultEnum;

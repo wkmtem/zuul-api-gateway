@@ -3,7 +3,7 @@ package com.nsntc.zuul.filter.zuul.pre;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.nsntc.commons.constant.PartyTopConstant;
-import com.nsntc.commons.enums.ZuulFilterTypeEnum;
+import com.nsntc.zuul.enums.ZuulFilterTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
